@@ -116,6 +116,17 @@ class TaxCalculator:
 
         result = OrderedDict()
 
+        # Add initial data to result
+        result["Calc Income (EUR)"] = self._salary
+        result["Calc Period"] = self._period.capitalize()
+        result["Calc Year"] = self._year
+        result["Holiday Allowance ?"] = "Yes" if self._holiday_allowance else "No"
+        result["Social Security ?"] = "Yes" if self._holiday_allowance else "No"
+        result["Older 65 ?"] = "Yes" if self._age else "No"
+        result["Ruling ?"] = self._ruling.capitalize()
+        result["Working Hours (per week)"] = self._working_hours
+
+        # Calculation part
         salary_by_period = dict.fromkeys(("year", "month", "day", "hour"), 0)
         salary_by_period[self._period] = self._salary
 
@@ -147,14 +158,15 @@ class TaxCalculator:
 
         taxable_year = math.floor(taxable_year)
 
-        result["Year Gross Holiday Allowance"] = gross_allowance
-        result["Year Gross Income"] = math.floor(gross_year)
-        result["Month Gross Income"] = math.floor(gross_year / 12)
-        result["Day Gross Income"] = math.floor(gross_year / self._tax_data["workingDays"])
-        result["Hour Gross Income"] = math.floor(gross_year / (self._tax_data["workingWeeks"] * self._working_hours))
-        result["Tax Free Income"] = math.floor(tax_free_year)
-        result["Ruling Real Percentage"] = math.floor(tax_free_year / gross_year * 100)
-        result["Taxable Income"] = taxable_year
+        # Add calculated data to result
+        result["Year Gross Holiday Allowance (EUR)"] = gross_allowance
+        result["Year Gross Income (EUR)"] = math.floor(gross_year)
+        result["Month Gross Income (EUR)"] = math.floor(gross_year / 12)
+        result["Day Gross Income (EUR)"] = math.floor(gross_year / self._tax_data["workingDays"])
+        result["Hour Gross Income (EUR)"] = math.floor(gross_year / (self._tax_data["workingWeeks"] * self._working_hours))
+        result["Tax Free Income (EUR)"] = math.floor(tax_free_year)
+        result["Ruling Real Percentage (%)"] = math.floor(tax_free_year / gross_year * 100)
+        result["Taxable Income (EUR)"] = taxable_year
 
         payroll_tax = -1 * self.get_payroll_tax(
             tax_data=self._tax_data,
@@ -194,15 +206,15 @@ class TaxCalculator:
 
         net_year = taxable_year + income_tax + tax_free_year
 
-        result["Payroll Tax"] = payroll_tax
-        result["Social Security Tax"] = social_tax
-        result["General Tax Credit"] = general_credit
-        result["Labour Tax Credit"] = labour_credit
-        result["Total Income Tax"] = income_tax
-        result["Year Net Holiday Allowance"] = math.floor(net_year * (0.08 / 1.08)) if self._holiday_allowance else 0
-        result["Year Net Income"] = net_year
-        result["Month Net Income"] = math.floor(net_year / 12)
-        result["Day Net Income"] = math.floor(net_year / self._tax_data["workingDays"])
-        result["Hour Net Income"] = math.floor(net_year / (self._tax_data["workingWeeks"] * self._working_hours))
+        result["Payroll Tax (EUR)"] = payroll_tax
+        result["Social Security Tax (EUR)"] = social_tax
+        result["General Tax Credit (EUR)"] = general_credit
+        result["Labour Tax Credit (EUR)"] = labour_credit
+        result["Total Income Tax (EUR)"] = income_tax
+        result["Year Net Holiday Allowance (EUR)"] = math.floor(net_year * (0.08 / 1.08)) if self._holiday_allowance else 0
+        result["Year Net Income (EUR)"] = net_year
+        result["Month Net Income (EUR)"] = math.floor(net_year / 12)
+        result["Day Net Income (EUR)"] = math.floor(net_year / self._tax_data["workingDays"])
+        result["Hour Net Income (EUR)"] = math.floor(net_year / (self._tax_data["workingWeeks"] * self._working_hours))
 
         return result

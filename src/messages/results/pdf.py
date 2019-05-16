@@ -1,4 +1,5 @@
 import io
+import numbers
 from fpdf import FPDF
 
 from .base import FileResultMessageBase
@@ -9,6 +10,14 @@ class PDFResultMessage(FileResultMessageBase):
     def get_filename(self):
         return "tax_results.pdf"
 
+    @staticmethod
+    def build_title(document):
+        document.cell(200, 10, ln=1, align="C", txt="TAX CALCULATION RESULTS")
+
+    @staticmethod
+    def build_sign(document):
+        document.cell(200, 10, ln=1, align="C", txt="Created by Dutch Tax Bot (c)")
+
     def get_document(self, data):
         pdf = FPDF(
             unit="mm",
@@ -17,13 +26,9 @@ class PDFResultMessage(FileResultMessageBase):
         )
         pdf.add_page()
         pdf.set_font("Arial", size=12)
-        pdf.cell(
-            w=200,
-            h=10,
-            ln=1,
-            align="C",
-            txt="TAX CALCULATION RESULTS",
-        )
+
+        self.build_title(pdf)
+        self.build_sign(pdf)
 
         spacing = 2
         col_width = pdf.w / 2.2
@@ -31,8 +36,7 @@ class PDFResultMessage(FileResultMessageBase):
 
         for label, value in data.items():
 
-            sign = " %" if label == "Ruling Real Percentage" else " EUR"
-            value = f"{value:.2f}{sign}"
+            value = f"{value:.2f}" if isinstance(value, numbers.Number) else value
 
             pdf.cell(col_width, row_height * spacing, txt=label, border=1)
             pdf.cell(col_width, row_height * spacing, txt=value, border=1)

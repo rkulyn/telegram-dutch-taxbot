@@ -1,4 +1,6 @@
+import numbers
 import telegram
+
 from emoji import emojize
 
 from .base import TextResultMessageBase
@@ -13,10 +15,12 @@ class TXTResultMessage(TextResultMessageBase):
         )
 
         for label, value in data.items():
-            sign = " %" if label == "Ruling Real Percentage" else " EUR"
+
+            value = f"{value:.2f}" if isinstance(value, numbers.Number) else value
+
             line = emojize(
                 f":small_orange_diamond: {label}: \n"
-                f":white_small_square: <b>{value:.2f}{sign}</b> \n"
+                f":white_small_square: <b>{value}</b> \n"
                 "------------------  \n",
                 use_aliases=True
             )
