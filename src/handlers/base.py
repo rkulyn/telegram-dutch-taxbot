@@ -4,8 +4,8 @@ import telegram
 
 class HandlerBase(abc.ABC):
 
-    def __init__(self, senders=None, emulate_typing=True):
-        self._senders = senders or tuple()
+    def __init__(self, messages=None, emulate_typing=True):
+        self._messages = messages or tuple()
         self._emulate_typing = emulate_typing
 
     def handle(self, bot, update, **session_data):
@@ -20,8 +20,8 @@ class HandlerBase(abc.ABC):
 
     def send_responses(self, bot, chat_id, custom_data=None, **session_data):
 
-        for sender in self._senders:
-            sender.send_response(bot, chat_id, custom_data, **session_data)
+        for message in self._messages:
+            message.send(bot, chat_id, custom_data)
 
     @abc.abstractmethod
     def get_chat_id(self, update):

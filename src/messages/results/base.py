@@ -1,7 +1,7 @@
 import abc
 
 
-class ResultResponseBase:
+class ResultMessageBase:
 
     @abc.abstractmethod
     def get_content(self, custom_data=None):
@@ -11,7 +11,7 @@ class ResultResponseBase:
         return {}
 
 
-class FileResultResponseBase(ResultResponseBase):
+class FileResultMessageBase(ResultMessageBase):
 
     @abc.abstractmethod
     def get_filename(self):
@@ -30,8 +30,14 @@ class FileResultResponseBase(ResultResponseBase):
         content.update(self.get_options())
         return content
 
+    def send(self, bot, chat_id, custom_data=None):
+        bot.send_document(
+            chat_id=chat_id,
+            **self.get_content(custom_data)
+        )
 
-class TextResultResponseBase(ResultResponseBase):
+
+class TextResultMessageBase(ResultMessageBase):
 
     @abc.abstractmethod
     def get_text(self, data):
@@ -44,3 +50,9 @@ class TextResultResponseBase(ResultResponseBase):
         })
         content.update(self.get_options())
         return content
+
+    def send(self, bot, chat_id, custom_data=None):
+        bot.send_message(
+            chat_id=chat_id,
+            **self.get_content(custom_data)
+        )

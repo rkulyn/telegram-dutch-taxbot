@@ -1,10 +1,10 @@
 import telegram
 from emoji import emojize
 
-from .base import MenuResponseBase
+from .base import MenuMessageBase
 
 
-class YearMenuResponse(MenuResponseBase):
+class YearMenuMessage(MenuMessageBase):
 
     ITEMS = tuple(
         ("year{0}".format(h), str(h))

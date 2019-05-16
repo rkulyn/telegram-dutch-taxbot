@@ -1,10 +1,10 @@
 import telegram
 from emoji import emojize
 
-from .base import MenuResponseBase
+from .base import MenuMessageBase
 
 
-class RulingMenuResponse(MenuResponseBase):
+class RulingMenuMessage(MenuMessageBase):
 
     ITEMS = tuple(
         ("ruling{0}".format(p.capitalize()), p)

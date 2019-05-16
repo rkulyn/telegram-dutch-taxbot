@@ -1,10 +1,10 @@
 import telegram
 from emoji import emojize
 
-from .base import MessageResponseBase
+from .base import TextMessageBase
 
 
-class HelpMessageResponse(MessageResponseBase):
+class HelpTextMessage(TextMessageBase):
 
     def get_text(self):
 

@@ -1,10 +1,10 @@
 import telegram
 from emoji import emojize
 
-from .base import TextResultResponseBase
+from .base import TextResultMessageBase
 
 
-class TxtResultResponse(TextResultResponseBase):
+class TXTResultMessage(TextResultMessageBase):
 
     def get_text(self, data):
         text = emojize(
@@ -13,11 +13,10 @@ class TxtResultResponse(TextResultResponseBase):
         )
 
         for label, value in data.items():
-            pct_sign = " %" if label == "Ruling Real Percentage" else ""
-            eur_sign = "" if label == "Ruling Real Percentage" else "€ "
+            sign = " %" if label == "Ruling Real Percentage" else " EUR"
             line = emojize(
                 f":small_orange_diamond: {label}: \n"
-                f":white_small_square: <b>{eur_sign}{value:.2f}{pct_sign}</b> \n"
+                f":white_small_square: <b>{value:.2f}{sign}</b> \n"
                 "------------------  \n",
                 use_aliases=True
             )

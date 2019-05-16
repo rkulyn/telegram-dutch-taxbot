@@ -1,10 +1,10 @@
 import telegram
 from emoji import emojize
 
-from .base import MenuResponseBase
+from .base import MenuMessageBase
 
 
-class ResultMenuResponse(MenuResponseBase):
+class ResultMenuMessage(MenuMessageBase):
 
     ITEMS = (
         ("resultTXT", "txt"),

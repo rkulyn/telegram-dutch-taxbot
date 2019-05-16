@@ -1,10 +1,10 @@
 import telegram
 from emoji import emojize
 
-from .base import MenuResponseBase
+from .base import MenuMessageBase
 
 
-class PeriodMenuResponse(MenuResponseBase):
+class PeriodMenuMessage(MenuMessageBase):
 
     ITEMS = tuple(
         ("period{0}".format(p.capitalize()), p)

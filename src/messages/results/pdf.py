@@ -1,10 +1,10 @@
 import io
 from fpdf import FPDF
 
-from .base import FileResultResponseBase
+from .base import FileResultMessageBase
 
 
-class PdfResultResponse(FileResultResponseBase):
+class PDFResultMessage(FileResultMessageBase):
 
     def get_filename(self):
         return "tax_results.pdf"

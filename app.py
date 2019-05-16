@@ -20,24 +20,21 @@ from src.handlers.mixins import (
     MessageChatIdMixin
 )
 
-from src.responses.menus.age import AgeMenuResponse
-from src.responses.menus.year import YearMenuResponse
-from src.responses.menus.period import PeriodMenuResponse
-from src.responses.menus.result import ResultMenuResponse
-from src.responses.menus.ruling import RulingMenuResponse
-from src.responses.menus.hours import WorkingHoursMenuResponse
-from src.responses.menus.security import SocialSecurityMenuResponse
-from src.responses.menus.holiday import HolidayAllowanceMenuResponse
+from src.messages.menus.age import AgeMenuMessage
+from src.messages.menus.year import YearMenuMessage
+from src.messages.menus.period import PeriodMenuMessage
+from src.messages.menus.result import ResultMenuMessage
+from src.messages.menus.ruling import RulingMenuMessage
+from src.messages.menus.hours import WorkingHoursMenuMessage
+from src.messages.menus.security import SocialSecurityMenuMessage
+from src.messages.menus.holiday import HolidayAllowanceMenuMessage
 
-from src.responses.messages.help import HelpMessageResponse
-from src.responses.messages.greeting import GreetingMessageResponse
-from src.responses.messages.salary import SalaryInputMessageResponse
+from src.messages.text.help import HelpTextMessage
+from src.messages.text.greeting import GreetingTextMessage
+from src.messages.text.salary import SalaryInputTextMessage
 
-from src.responses.results.txt import TxtResultResponse
-from src.responses.results.pdf import PdfResultResponse
-
-from src.senders.text import TextSender
-from src.senders.file import FileSender
+from src.messages.results.txt import TXTResultMessage
+from src.messages.results.pdf import PDFResultMessage
 
 
 config = get_config()
@@ -90,7 +87,7 @@ class PeriodCallbackHandler(CallbackChatIdMixin, HandlerBase):
     """
     def handle(self, bot, update, **session_data):
         command = update.callback_query.data
-        value = PeriodMenuResponse.get_value_from_command(command)
+        value = PeriodMenuMessage.get_value_from_command(command)
 
         user_data = session_data["user_data"]
         user_data["input_data"]["period"] = value
@@ -107,7 +104,7 @@ class YearCallbackHandler(CallbackChatIdMixin, HandlerBase):
     """
     def handle(self, bot, update, **session_data):
         command = update.callback_query.data
-        value = YearMenuResponse.get_value_from_command(command)
+        value = YearMenuMessage.get_value_from_command(command)
 
         user_data = session_data["user_data"]
         user_data["input_data"]["year"] = value
@@ -124,7 +121,7 @@ class HolidayAllowanceCallbackHandler(CallbackChatIdMixin, HandlerBase):
     """
     def handle(self, bot, update, **session_data):
         command = update.callback_query.data
-        value = HolidayAllowanceMenuResponse.get_value_from_command(command)
+        value = HolidayAllowanceMenuMessage.get_value_from_command(command)
 
         user_data = session_data["user_data"]
         user_data["input_data"]["holiday_allowance"] = value
@@ -141,7 +138,7 @@ class SocialSecurityCallbackHandler(CallbackChatIdMixin, HandlerBase):
     """
     def handle(self, bot, update, **session_data):
         command = update.callback_query.data
-        value = SocialSecurityMenuResponse.get_value_from_command(command)
+        value = SocialSecurityMenuMessage.get_value_from_command(command)
 
         user_data = session_data["user_data"]
         user_data["input_data"]["social_security"] = value
@@ -158,7 +155,7 @@ class AgeCallbackHandler(CallbackChatIdMixin, HandlerBase):
     """
     def handle(self, bot, update, **session_data):
         command = update.callback_query.data
-        value = AgeMenuResponse.get_value_from_command(command)
+        value = AgeMenuMessage.get_value_from_command(command)
 
         user_data = session_data["user_data"]
         user_data["input_data"]["age"] = value
@@ -175,7 +172,7 @@ class RulingCallbackHandler(CallbackChatIdMixin, HandlerBase):
     """
     def handle(self, bot, update, **session_data):
         command = update.callback_query.data
-        value = RulingMenuResponse.get_value_from_command(command)
+        value = RulingMenuMessage.get_value_from_command(command)
 
         user_data = session_data["user_data"]
         user_data["input_data"]["ruling"] = value
@@ -192,7 +189,7 @@ class WorkingHoursCallbackHandler(CallbackChatIdMixin, HandlerBase):
     """
     def handle(self, bot, update, **session_data):
         command = update.callback_query.data
-        value = WorkingHoursMenuResponse.get_value_from_command(command)
+        value = WorkingHoursMenuMessage.get_value_from_command(command)
 
         user_data = session_data["user_data"]
         user_data["input_data"]["working_hours"] = value
@@ -215,7 +212,7 @@ class ResultCallbackHandler(CallbackChatIdMixin, HandlerBase):
 
         if input_data:
             command = update.callback_query.data
-            result_type = ResultMenuResponse.get_value_from_command(command)
+            result_type = ResultMenuMessage.get_value_from_command(command)
 
             loader = JsonDataLoader(path="data.json")
             calculator = TaxCalculator(loader, **input_data)
@@ -233,25 +230,11 @@ class ResultCallbackHandler(CallbackChatIdMixin, HandlerBase):
 
             if calc_result_type == "txt":
 
-                sender = TextSender(
-                    responses=(TxtResultResponse(),)
-                )
-                sender.send_response(
-                    bot,
-                    chat_id,
-                    custom_data=calc_result_data
-                )
+                TXTResultMessage().send(bot, chat_id, calc_result_data)
 
             if calc_result_type == "pdf":
 
-                sender = FileSender(
-                    responses=(PdfResultResponse(),)
-                )
-                sender.send_response(
-                    bot,
-                    chat_id,
-                    custom_data=calc_result_data
-                )
+                PDFResultMessage().send(bot, chat_id, calc_result_data)
 
         else:
             bot.send_message(
@@ -322,135 +305,74 @@ def main():
     # Get the dispatcher to register handlers
     dp = updater.dispatcher
 
-    # Define response menus
-    period_menu = PeriodMenuResponse()
-    year_menu = YearMenuResponse()
-    holiday_menu = HolidayAllowanceMenuResponse()
-    security_menu = SocialSecurityMenuResponse()
-    age_menu = AgeMenuResponse()
-    ruling_menu = RulingMenuResponse()
-    hours_menu = WorkingHoursMenuResponse()
-    result_menu = ResultMenuResponse()
+    # Define menu messages
+    age_menu_msg = AgeMenuMessage()
+    year_menu_msg = YearMenuMessage()
+    period_menu_msg = PeriodMenuMessage()
+    ruling_menu_msg = RulingMenuMessage()
+    result_menu_msg = ResultMenuMessage()
+    hours_menu_msg = WorkingHoursMenuMessage()
+    security_menu_msg = SocialSecurityMenuMessage()
+    holiday_menu_msg = HolidayAllowanceMenuMessage()
 
-    # Define messages
-    help_message = HelpMessageResponse()
-    greeting_message = GreetingMessageResponse()
-    salary_message = SalaryInputMessageResponse()
+    # # Define text messages
+    help_text_msg = HelpTextMessage()
+    greeting_text_msg = GreetingTextMessage()
+    salary_text_msg = SalaryInputTextMessage()
 
     # Define handlers
 
     # Start command handler
-    start_responses = (
-        greeting_message,
-        salary_message,
-    )
-    start_response_senders = (
-        TextSender(start_responses),
-    )
     start_handler = StartHandler(
-        start_response_senders
+        messages=(greeting_text_msg, salary_text_msg,)
     )
 
     # Salary input handler
-    salary_responses = (
-        period_menu,
-    )
-    salary_response_senders = (
-        TextSender(salary_responses),
-    )
     salary_handler = SalaryHandler(
-        salary_response_senders
+        messages=(period_menu_msg,)
     )
 
     # Period menu handler
-    period_responses = (
-        year_menu,
-    )
-    period_response_senders = (
-        TextSender(period_responses),
-    )
     period_handler = PeriodCallbackHandler(
-        period_response_senders
+        messages=(year_menu_msg,)
     )
 
     # Year handler
-    year_responses = (
-        holiday_menu,
-    )
-    year_response_senders = (
-        TextSender(year_responses),
-    )
     year_handler = YearCallbackHandler(
-        year_response_senders
+        messages=(holiday_menu_msg,)
     )
 
     # Holiday handler
-    holiday_responses = (
-        security_menu,
-    )
-    holiday_response_senders = (
-        TextSender(holiday_responses),
-    )
     holiday_handler = HolidayAllowanceCallbackHandler(
-        holiday_response_senders
+        messages=(security_menu_msg,)
     )
 
     # Security handler
-    security_responses = (
-        age_menu,
-    )
-    security_response_senders = (
-        TextSender(security_responses),
-    )
     security_handler = SocialSecurityCallbackHandler(
-        security_response_senders
+        messages=(age_menu_msg,)
     )
 
     # Age handler
-    age_responses = (
-        ruling_menu,
-    )
-    age_response_senders = (
-        TextSender(age_responses),
-    )
     age_handler = AgeCallbackHandler(
-        age_response_senders
+        messages=(ruling_menu_msg,)
     )
 
     # Ruling handler
-    ruling_responses = (
-        hours_menu,
-    )
-    ruling_response_senders = (
-        TextSender(ruling_responses),
-    )
     ruling_handler = RulingCallbackHandler(
-        ruling_response_senders
+        messages=(hours_menu_msg,)
     )
 
     # Working hours handler
-    hours_responses = (
-        result_menu,
-    )
-    hours_response_senders = (
-        TextSender(hours_responses),
-    )
     hours_handler = WorkingHoursCallbackHandler(
-        hours_response_senders
+        messages=(result_menu_msg,)
     )
 
     # Result handler
     result_handler = ResultCallbackHandler()
 
     # Help handler
-    help_responses = (
-        help_message,
-    )
-    help_response_senders = (
-        TextSender(help_responses),
-    )
     help_handler = HelpHandler(
-        help_response_senders
+        messages=(help_text_msg,)
     )
 
     # Default handler.
@@ -474,49 +396,49 @@ def main():
 
     dp.add_handler(CallbackQueryHandler(
         callback=period_handler,
-        pattern=period_menu.get_pattern(),
+        pattern=period_menu_msg.get_pattern(),
         pass_user_data=True,
     ))
 
     dp.add_handler(CallbackQueryHandler(
         callback=year_handler,
-        pattern=year_menu.get_pattern(),
+        pattern=year_menu_msg.get_pattern(),
         pass_user_data=True,
     ))
 
     dp.add_handler(CallbackQueryHandler(
         callback=holiday_handler,
-        pattern=holiday_menu.get_pattern(),
+        pattern=holiday_menu_msg.get_pattern(),
         pass_user_data=True,
     ))
 
     dp.add_handler(CallbackQueryHandler(
         callback=security_handler,
-        pattern=security_menu.get_pattern(),
+        pattern=security_menu_msg.get_pattern(),
         pass_user_data=True,
     ))
 
     dp.add_handler(CallbackQueryHandler(
         callback=age_handler,
-        pattern=age_menu.get_pattern(),
+        pattern=age_menu_msg.get_pattern(),
         pass_user_data=True,
     ))
 
     dp.add_handler(CallbackQueryHandler(
         callback=ruling_handler,
-        pattern=ruling_menu.get_pattern(),
+        pattern=ruling_menu_msg.get_pattern(),
         pass_user_data=True,
     ))
 
     dp.add_handler(CallbackQueryHandler(
         callback=hours_handler,
-        pattern=hours_menu.get_pattern(),
+        pattern=hours_menu_msg.get_pattern(),
         pass_user_data=True,
     ))
 
     dp.add_handler(CallbackQueryHandler(
         callback=result_handler,
-        pattern=result_menu.get_pattern(),
+        pattern=result_menu_msg.get_pattern(),
         pass_user_data=True,
     ))
 

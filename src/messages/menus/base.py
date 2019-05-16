@@ -3,7 +3,7 @@ import telegram
 from operator import itemgetter
 
 
-class MenuResponseBase:
+class MenuMessageBase:
 
     ITEMS = tuple()
     COLUMN_NUMBER = 1
@@ -56,3 +56,9 @@ class MenuResponseBase:
         })
         content.update(self.get_options())
         return content
+
+    def send(self, bot, chat_id, custom_data=None):
+        bot.send_message(
+            chat_id=chat_id,
+            **self.get_content(custom_data)
+        )

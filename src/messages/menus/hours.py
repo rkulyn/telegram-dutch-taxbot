@@ -1,10 +1,10 @@
 import telegram
 from emoji import emojize
 
-from .base import MenuResponseBase
+from .base import MenuMessageBase
 
 
-class WorkingHoursMenuResponse(MenuResponseBase):
+class WorkingHoursMenuMessage(MenuMessageBase):
 
     ITEMS = tuple(
         ("workingHours{0}".format(h), h)
