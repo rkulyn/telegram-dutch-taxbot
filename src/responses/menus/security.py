@@ -11,6 +11,7 @@ class SocialSecurityMenuResponse(MenuResponseBase):
         ("socialSecurityExc", False),
     )
     COLUMN_NUMBER = 2
+    DEFAULT_VALUE = False
 
     @staticmethod
     def button_factory(command, value):
@@ -27,13 +28,3 @@ class SocialSecurityMenuResponse(MenuResponseBase):
 
     def get_text(self):
         return "Is social security included?"
-
-    @classmethod
-    def get_value_from_command(cls, command):
-        return dict(cls.ITEMS).get(command, False)
-
-    def get_content(self, *args, **kwargs):
-        return {
-            "text": self.get_text(),
-            "reply_markup": self.build_markup(),
-        }

@@ -11,10 +11,15 @@ class PeriodMenuResponse(MenuResponseBase):
         for p in ("year", "month", "day", "hour")
     )
     COLUMN_NUMBER = 2
+    DEFAULT_VALUE = "year"
 
     @staticmethod
     def button_factory(command, value):
-        icon = ":small_orange_diamond:" if value == "year" else ":small_blue_diamond:"
+        icon = (
+            ":small_orange_diamond:"
+            if value == "year"
+            else ":small_blue_diamond:"
+        )
         value = value.capitalize()
         button = telegram.InlineKeyboardButton(
             emojize(f"{icon} {value}", use_aliases=True),
@@ -24,13 +29,3 @@ class PeriodMenuResponse(MenuResponseBase):
 
     def get_text(self):
         return "Please choose salary period."
-
-    @classmethod
-    def get_value_from_command(cls, command):
-        return dict(cls.ITEMS).get(command, "year")
-
-    def get_content(self, *args, **kwargs):
-        return {
-            "text": self.get_text(),
-            "reply_markup": self.build_markup(),
-        }

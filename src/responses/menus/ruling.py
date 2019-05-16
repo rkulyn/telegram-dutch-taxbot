@@ -11,6 +11,7 @@ class RulingMenuResponse(MenuResponseBase):
         for p in ("research", "young", "normal", "no")
     )
     COLUMN_NUMBER = 1
+    DEFAULT_VALUE = "no"
 
     @staticmethod
     def button_factory(command, value):
@@ -34,13 +35,3 @@ class RulingMenuResponse(MenuResponseBase):
             "Is 30% ruling applied? \n"
             "(Tax benefit rule for up-to 30% of gross salary)."
         )
-
-    @classmethod
-    def get_value_from_command(cls, command):
-        return dict(cls.ITEMS).get(command, "no")
-
-    def get_content(self, *args, **kwargs):
-        return {
-            "text": self.get_text(),
-            "reply_markup": self.build_markup(),
-        }

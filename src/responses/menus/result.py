@@ -11,6 +11,7 @@ class ResultMenuResponse(MenuResponseBase):
         ("resultPDF", "pdf"),
     )
     COLUMN_NUMBER = 2
+    DEFAULT_VALUE = False
 
     @staticmethod
     def button_factory(command, value):
@@ -27,13 +28,3 @@ class ResultMenuResponse(MenuResponseBase):
 
     def get_text(self):
         return "How would you prefer to get result?"
-
-    @classmethod
-    def get_value_from_command(cls, command):
-        return dict(cls.ITEMS).get(command, False)
-
-    def get_content(self, *args, **kwargs):
-        return {
-            "text": self.get_text(),
-            "reply_markup": self.build_markup(),
-        }

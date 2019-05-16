@@ -32,9 +32,8 @@ class HelpMessageResponse(MessageResponseBase):
         )
         return message
 
-    def get_content(self, *args, **kwargs):
+    def get_options(self):
         return {
-            "text": self.get_text(),
-            "parse_mode": telegram.ParseMode.HTML,
             "disable_web_page_preview": True,
+            "parse_mode": telegram.ParseMode.HTML,
         }

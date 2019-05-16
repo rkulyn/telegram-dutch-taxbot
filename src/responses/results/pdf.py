@@ -1,12 +1,15 @@
 import io
 from fpdf import FPDF
 
-from .base import ResultResponseBase
+from .base import FileResultResponseBase
 
 
-class PdfResultResponse(ResultResponseBase):
+class PdfResultResponse(FileResultResponseBase):
 
-    def prepare_result(self, data):
+    def get_filename(self):
+        return "tax_results.pdf"
+
+    def get_document(self, data):
         pdf = FPDF(
             unit="mm",
             format="A4",
@@ -37,9 +40,3 @@ class PdfResultResponse(ResultResponseBase):
 
         obj = io.BytesIO(pdf.output(dest="S").encode("latin-1"))
         return obj
-
-    def get_content(self, data):
-        return {
-            "filename": "tax_results.pdf",
-            "document": self.prepare_result(data),
-        }

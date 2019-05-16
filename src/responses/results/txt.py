@@ -1,12 +1,12 @@
 import telegram
 from emoji import emojize
 
-from .base import ResultResponseBase
+from .base import TextResultResponseBase
 
 
-class TxtResultResponse(ResultResponseBase):
+class TxtResultResponse(TextResultResponseBase):
 
-    def prepare_result(self, data):
+    def get_text(self, data):
         text = emojize(
             ":point_down: <b>RESULTS</b> \n\n",
             use_aliases=True
@@ -25,8 +25,5 @@ class TxtResultResponse(ResultResponseBase):
 
         return text
 
-    def get_content(self, data):
-        return {
-            "text": self.prepare_result(data),
-            "parse_mode": telegram.ParseMode.HTML
-        }
+    def get_options(self):
+        return {"parse_mode": telegram.ParseMode.HTML}

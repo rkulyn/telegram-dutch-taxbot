@@ -11,6 +11,7 @@ class YearMenuResponse(MenuResponseBase):
         for h in range(2019, 2015, -1)
     )
     COLUMN_NUMBER = 2
+    DEFAULT_VALUE = "2019"
 
     @staticmethod
     def button_factory(command, value):
@@ -23,13 +24,3 @@ class YearMenuResponse(MenuResponseBase):
 
     def get_text(self):
         return "Choose calculation year."
-
-    @classmethod
-    def get_value_from_command(cls, command):
-        return dict(cls.ITEMS).get(command, "2019")
-
-    def get_content(self, *args, **kwargs):
-        return {
-            "text": self.get_text(),
-            "reply_markup": self.build_markup(),
-        }

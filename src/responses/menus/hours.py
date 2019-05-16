@@ -11,6 +11,7 @@ class WorkingHoursMenuResponse(MenuResponseBase):
         for h in range(4, 84, 4)
     )
     COLUMN_NUMBER = 4
+    DEFAULT_VALUE = 40
 
     @staticmethod
     def button_factory(command, value):
@@ -27,13 +28,5 @@ class WorkingHoursMenuResponse(MenuResponseBase):
             "<i>(usually 40)</i>."
         )
 
-    @classmethod
-    def get_value_from_command(cls, command):
-        return dict(cls.ITEMS).get(command, 40)
-
-    def get_content(self, *args, **kwargs):
-        return {
-            "text": self.get_text(),
-            "reply_markup": self.build_markup(),
-            "parse_mode": telegram.ParseMode.HTML,
-        }
+    def get_options(self):
+        return {"parse_mode": telegram.ParseMode.HTML}

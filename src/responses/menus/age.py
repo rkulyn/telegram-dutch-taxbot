@@ -11,12 +11,15 @@ class AgeMenuResponse(MenuResponseBase):
         ("lower65", False),
     )
     COLUMN_NUMBER = 2
+    DEFAULT_VALUE = False
 
     @staticmethod
     def button_factory(command, value):
         button = telegram.InlineKeyboardButton(
             emojize(
-                ":sunglasses: Yes" if value else ":baby: No",
+                ":sunglasses: Yes"
+                if value
+                else ":baby: No",
                 use_aliases=True
             ),
             callback_data=command
@@ -29,13 +32,5 @@ class AgeMenuResponse(MenuResponseBase):
             "<i>(Retirement age or older).</i>"
         )
 
-    @classmethod
-    def get_value_from_command(cls, command):
-        return dict(cls.ITEMS).get(command, False)
-
-    def get_content(self, *args, **kwargs):
-        return {
-            "text": self.get_text(),
-            "reply_markup": self.build_markup(),
-            "parse_mode": telegram.ParseMode.HTML,
-        }
+    def get_options(self):
+        return {"parse_mode": telegram.ParseMode.HTML}

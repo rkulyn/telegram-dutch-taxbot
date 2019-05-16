@@ -16,8 +16,5 @@ class SalaryInputMessageResponse(MessageResponseBase):
         )
         return message
 
-    def get_content(self, *args, **kwargs):
-        return {
-            "text": self.get_text(),
-            "parse_mode": telegram.ParseMode.HTML,
-        }
+    def get_options(self):
+        return {"parse_mode": telegram.ParseMode.HTML}

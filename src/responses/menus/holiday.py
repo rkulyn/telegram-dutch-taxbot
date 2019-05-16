@@ -11,12 +11,15 @@ class HolidayAllowanceMenuResponse(MenuResponseBase):
         ("holidayAllowanceExc", False),
     )
     COLUMN_NUMBER = 2
+    DEFAULT_VALUE = False
 
     @staticmethod
     def button_factory(command, value):
         button = telegram.InlineKeyboardButton(
             emojize(
-                ":smile: Yes" if value else ":disappointed: No",
+                ":smile: Yes"
+                if value
+                else ":disappointed: No",
                 use_aliases=True
             ),
             callback_data=command
@@ -29,13 +32,5 @@ class HolidayAllowanceMenuResponse(MenuResponseBase):
             "<i>(Gross salary provided includes 8% of holiday allowance).</i>"
         )
 
-    @classmethod
-    def get_value_from_command(cls, command):
-        return dict(cls.ITEMS).get(command, False)
-
-    def get_content(self, *args, **kwargs):
-        return {
-            "text": self.get_text(),
-            "reply_markup": self.build_markup(),
-            "parse_mode": telegram.ParseMode.HTML,
-        }
+    def get_options(self):
+        return {"parse_mode": telegram.ParseMode.HTML}
