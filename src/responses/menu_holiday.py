@@ -24,7 +24,7 @@ class HolidayAllowanceMenuResponse(ResponseMenuMixin, ResponseBase):
         )
         return button
 
-    def get_title(self):
+    def get_text(self):
         return (
             "Is holiday allowance included? \n"
             "<i>(Gross salary provided includes 8% of holiday allowance).</i>"
@@ -34,5 +34,9 @@ class HolidayAllowanceMenuResponse(ResponseMenuMixin, ResponseBase):
     def get_value_from_command(cls, command):
         return dict(cls.ITEMS).get(command, False)
 
-    def get_parse_mode(self):
-        return telegram.ParseMode.HTML
+    def get_params(self):
+        params = super().get_params()
+        params["text"] = self.get_text()
+        params["reply_markup"] = self.build_markup()
+        params["parse_mode"] = telegram.ParseMode.HTML
+        return params

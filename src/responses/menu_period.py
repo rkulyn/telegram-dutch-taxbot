@@ -22,9 +22,15 @@ class PeriodMenuResponse(ResponseMenuMixin, ResponseBase):
         )
         return button
 
-    def get_title(self):
+    def get_text(self):
         return "Please choose salary period."
 
     @classmethod
     def get_value_from_command(cls, command):
         return dict(cls.ITEMS).get(command, "year")
+
+    def get_params(self):
+        params = super().get_params()
+        params["text"] = self.get_text()
+        params["reply_markup"] = self.build_markup()
+        return params

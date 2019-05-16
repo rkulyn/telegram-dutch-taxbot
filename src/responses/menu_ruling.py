@@ -28,7 +28,7 @@ class RulingMenuResponse(ResponseMenuMixin, ResponseBase):
         )
         return button
 
-    def get_title(self):
+    def get_text(self):
         return (
             "Is 30% ruling applied? \n"
             "(Tax benefit rule for up-to 30% of gross salary)."
@@ -37,3 +37,9 @@ class RulingMenuResponse(ResponseMenuMixin, ResponseBase):
     @classmethod
     def get_value_from_command(cls, command):
         return dict(cls.ITEMS).get(command, "no")
+
+    def get_params(self):
+        params = super().get_params()
+        params["text"] = self.get_text()
+        params["reply_markup"] = self.build_markup()
+        return params

@@ -1,5 +1,4 @@
 import logging
-import telegram
 
 from emoji import emojize
 
@@ -31,6 +30,9 @@ from src.responses.message_salary import SalaryInputMessageResponse
 from src.handlers.base import HandlerBase
 from src.handlers.mixins import CallbackChatIdMixin, MessageChatIdMixin
 
+from src.outputs.output_pdf import PdfOutput
+from src.outputs.output_txt import TxtOutput
+
 
 config = get_config()
 
@@ -44,7 +46,11 @@ logger = logging.getLogger("Bot")
 
 
 class StartHandler(CallbackChatIdMixin, HandlerBase):
+    """
+    Start bot command handler.
+    Set initial user input data.
 
+    """
     def handle(self, bot, update, **options):
         user_id = update.effective_user["id"]
         if user_id != config.ADMIN_ID:
@@ -55,7 +61,11 @@ class StartHandler(CallbackChatIdMixin, HandlerBase):
 
 
 class SalaryHandler(MessageChatIdMixin, HandlerBase):
+    """
+    Salary input handler.
+    Save valid "salary" value to user input data inside session.
 
+    """
     def handle(self, bot, update, **options):
         user_data = options["user_data"]
         value = float(update.message.text)
@@ -67,7 +77,11 @@ class SalaryHandler(MessageChatIdMixin, HandlerBase):
 
 
 class PeriodCallbackHandler(CallbackChatIdMixin, HandlerBase):
+    """
+    Period input callback handler.
+    Save valid "period" value to user input data inside session.
 
+    """
     def handle(self, bot, update, **options):
         command = update.callback_query.data
         value = PeriodMenuResponse.get_value_from_command(command)
@@ -80,7 +94,11 @@ class PeriodCallbackHandler(CallbackChatIdMixin, HandlerBase):
 
 
 class YearCallbackHandler(CallbackChatIdMixin, HandlerBase):
+    """
+    Year input callback handler.
+    Save valid "year" value to user input data inside session.
 
+    """
     def handle(self, bot, update, **options):
         command = update.callback_query.data
         value = YearMenuResponse.get_value_from_command(command)
@@ -93,7 +111,11 @@ class YearCallbackHandler(CallbackChatIdMixin, HandlerBase):
 
 
 class HolidayAllowanceCallbackHandler(CallbackChatIdMixin, HandlerBase):
+    """
+    Holiday allowance flag callback handler.
+    Save valid "holiday allowance" value to user input data inside session.
 
+    """
     def handle(self, bot, update, **options):
         command = update.callback_query.data
         value = HolidayAllowanceMenuResponse.get_value_from_command(command)
@@ -106,7 +128,11 @@ class HolidayAllowanceCallbackHandler(CallbackChatIdMixin, HandlerBase):
 
 
 class SocialSecurityCallbackHandler(CallbackChatIdMixin, HandlerBase):
+    """
+    Social security flag callback handler.
+    Save valid "social security" value to user input data inside session.
 
+    """
     def handle(self, bot, update, **options):
         command = update.callback_query.data
         value = SocialSecurityMenuResponse.get_value_from_command(command)
@@ -119,7 +145,11 @@ class SocialSecurityCallbackHandler(CallbackChatIdMixin, HandlerBase):
 
 
 class AgeCallbackHandler(CallbackChatIdMixin, HandlerBase):
+    """
+    Retirement age flag callback handler.
+    Save valid "retirement age" value to user input data inside session.
 
+    """
     def handle(self, bot, update, **options):
         command = update.callback_query.data
         value = AgeMenuResponse.get_value_from_command(command)
@@ -132,7 +162,11 @@ class AgeCallbackHandler(CallbackChatIdMixin, HandlerBase):
 
 
 class RulingCallbackHandler(CallbackChatIdMixin, HandlerBase):
+    """
+    Ruling flag callback handler.
+    Save valid "ruling" value to user input data inside session.
 
+    """
     def handle(self, bot, update, **options):
         command = update.callback_query.data
         value = RulingMenuResponse.get_value_from_command(command)
@@ -145,7 +179,11 @@ class RulingCallbackHandler(CallbackChatIdMixin, HandlerBase):
 
 
 class WorkingHoursCallbackHandler(CallbackChatIdMixin, HandlerBase):
+    """
+    Working hours callback handler.
+    Save valid "working hours" value to user input data inside session.
 
+    """
     def handle(self, bot, update, **options):
         command = update.callback_query.data
         value = WorkingHoursMenuResponse.get_value_from_command(command)
@@ -208,14 +246,22 @@ class ResultCallbackHandler(CallbackChatIdMixin, HandlerBase):
 
         if calc_result_type and calc_result_data:
 
-            if calc_result_type == "msg":
+            if calc_result_type == "txt":
 
-                text = self.format_msg_response(calc_result_data)
+                output = TxtOutput()
                 bot.send_message(
                     chat_id=chat_id,
-                    text=text,
-                    parse_mode=telegram.ParseMode.HTML
+                    **output.get_params(calc_result_data)
                 )
+
+            if calc_result_type == "pdf":
+
+                output = PdfOutput()
+                bot.send_document(
+                    chat_id=chat_id,
+                    **output.get_params(calc_result_data)
+                )
+
         else:
             bot.send_message(
                 chat_id=chat_id,
@@ -230,11 +276,49 @@ class ResultCallbackHandler(CallbackChatIdMixin, HandlerBase):
 
 
 class HelpHandler(CallbackChatIdMixin, HandlerBase):
-    # Just send response
-    logger.debug("Help requested.")
+    """
+    Help command handler.
+    Just send simple text response.
+
+    """
+    def handle(self, bot, update, **options):
+        chat_id = self.get_chat_id(update)
+        logger.debug(f'Help requested. CHAT_ID: "{chat_id}".')
+
+
+class DefaultHandler(MessageChatIdMixin, HandlerBase):
+    """
+    Default handler. Catch all invalid inputs from user.
+    Just send dimple text response.
+
+    """
+    def handle(self, bot, update, **options):
+        chat_id = self.get_chat_id(update)
+        value = update.message.text
+        logger.debug(f'Invalid command: "{value}". CHAT_ID: "{chat_id}".')
+
+    def send_responses(self, bot, chat_id, **options):
+        bot.send_message(
+            chat_id=chat_id,
+            text=emojize(
+                "Sorry, I can't understand this command. :blush: \n",
+                use_aliases=True
+            )
+        )
 
 
 def error(bot, update, error):
+    """
+    Simple error logging handler.
+
+    Args:
+        bot (instance): Bot instance.
+        update:
+        error:
+
+    Returns: None.
+
+    """
     logger.warning(f'An error occurred. BOT: "{bot}". DETAILS: "{error}".')
 
 
@@ -294,6 +378,7 @@ def main():
     help_handler = HelpHandler(
         responses=(help_message,)
     )
+    default_handler = DefaultHandler()
 
     # Attach handlers to dispatcher
     dp.add_handler(CommandHandler(
@@ -361,6 +446,11 @@ def main():
     dp.add_handler(CommandHandler(
         command="help",
         callback=help_handler
+    ))
+
+    dp.add_handler(MessageHandler(
+        filters=Filters.all,
+        callback=default_handler
     ))
 
     # log all errors

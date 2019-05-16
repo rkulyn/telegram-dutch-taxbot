@@ -4,8 +4,9 @@ import telegram
 
 class HandlerBase(abc.ABC):
 
-    def __init__(self, responses=None):
+    def __init__(self, responses=None, emulate_typing=True):
         self._responses = responses or tuple()
+        self._emulate_typing = emulate_typing
 
     def handle(self, bot, update, **options):
         pass
@@ -23,10 +24,7 @@ class HandlerBase(abc.ABC):
 
             bot.send_message(
                 chat_id=chat_id,
-                text=response.get_title(),
-                reply_markup=response.build_markup(),
-                parse_mode=response.get_parse_mode(),
-                disable_web_page_preview=True,
+                **response.get_params()
             )
 
     @abc.abstractmethod
@@ -35,6 +33,9 @@ class HandlerBase(abc.ABC):
 
     def __call__(self, bot, update, **options):
         chat_id = self.get_chat_id(update)
-        self.emulate_typing(bot, chat_id)
+
+        if self._emulate_typing:
+            self.emulate_typing(bot, chat_id)
+
         self.handle(bot, update, **options)
         self.send_responses(bot, chat_id, **options)

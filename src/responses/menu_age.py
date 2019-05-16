@@ -24,7 +24,7 @@ class AgeMenuResponse(ResponseMenuMixin, ResponseBase):
         )
         return button
 
-    def get_title(self):
+    def get_text(self):
         return (
             "Are you 65 years or older? \n"
             "<i>(Retirement age or older).</i>"
@@ -34,5 +34,9 @@ class AgeMenuResponse(ResponseMenuMixin, ResponseBase):
     def get_value_from_command(cls, command):
         return dict(cls.ITEMS).get(command, False)
 
-    def get_parse_mode(self):
-        return telegram.ParseMode.HTML
+    def get_params(self):
+        params = super().get_params()
+        params["text"] = self.get_text()
+        params["reply_markup"] = self.build_markup()
+        params["parse_mode"] = telegram.ParseMode.HTML
+        return params

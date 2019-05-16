@@ -1,25 +1,15 @@
 import abc
+from copy import deepcopy
 
 
 class ResponseBase(abc.ABC):
 
-    @staticmethod
-    def get_parse_mode():
-        return None
+    def __init__(self, **initial_params):
+        self._initial_params = initial_params
 
-    @classmethod
-    @abc.abstractmethod
-    def get_value_from_command(cls, command):
-        pass
+    def get_params(self):
+        return deepcopy(self._initial_params)
 
     @abc.abstractmethod
-    def build_markup(self):
-        pass
-
-    @abc.abstractmethod
-    def get_pattern(self):
-        pass
-
-    @abc.abstractmethod
-    def get_title(self):
-        pass
+    def get_text(self):
+        return ""

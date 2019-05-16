@@ -2,12 +2,11 @@ import telegram
 from emoji import emojize
 
 from .base import ResponseBase
-from .mixins import ResponseMessageMixin
 
 
-class HelpMessageResponse(ResponseMessageMixin, ResponseBase):
+class HelpMessageResponse(ResponseBase):
 
-    def get_title(self):
+    def get_text(self):
 
         message = emojize(
             "<b>Dutch Tax Calculation Bot help</b>\n\n"
@@ -33,5 +32,9 @@ class HelpMessageResponse(ResponseMessageMixin, ResponseBase):
         )
         return message
 
-    def get_parse_mode(self):
-        return telegram.ParseMode.HTML
+    def get_params(self):
+        params = super().get_params()
+        params["text"] = self.get_text()
+        params["parse_mode"] = telegram.ParseMode.HTML
+        params["disable_web_page_preview"] = True
+        return params

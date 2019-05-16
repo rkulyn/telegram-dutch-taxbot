@@ -8,7 +8,7 @@ from .mixins import ResponseMenuMixin
 class ResultMenuResponse(ResponseMenuMixin, ResponseBase):
 
     ITEMS = (
-        ("resultMSG", "msg"),
+        ("resultTXT", "txt"),
         ("resultPDF", "pdf"),
     )
     COLUMN_NUMBER = 2
@@ -17,16 +17,22 @@ class ResultMenuResponse(ResponseMenuMixin, ResponseBase):
     def button_factory(command, value):
         button = telegram.InlineKeyboardButton(
             emojize(
-                ":speech_balloon: As message" if value == 'msg' else ":page_facing_up: As PDF",
+                ":speech_balloon: As message" if value == 'txt' else ":page_facing_up: As PDF",
                 use_aliases=True
             ),
             callback_data=command
         )
         return button
 
-    def get_title(self):
+    def get_text(self):
         return "How would you prefer to get result?"
 
     @classmethod
     def get_value_from_command(cls, command):
         return dict(cls.ITEMS).get(command, False)
+
+    def get_params(self):
+        params = super().get_params()
+        params["text"] = self.get_text()
+        params["reply_markup"] = self.build_markup()
+        return params

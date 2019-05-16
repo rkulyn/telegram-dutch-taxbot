@@ -2,12 +2,11 @@ import telegram
 from emoji import emojize
 
 from .base import ResponseBase
-from .mixins import ResponseMessageMixin
 
 
-class SalaryInputMessageResponse(ResponseMessageMixin, ResponseBase):
+class SalaryInputMessageResponse(ResponseBase):
 
-    def get_title(self):
+    def get_text(self):
 
         message = emojize(
             "Please enter <b>GROSS</b> salary in EUR \n"
@@ -17,5 +16,8 @@ class SalaryInputMessageResponse(ResponseMessageMixin, ResponseBase):
         )
         return message
 
-    def get_parse_mode(self):
-        return telegram.ParseMode.HTML
+    def get_params(self):
+        params = super().get_params()
+        params["text"] = self.get_text()
+        params["parse_mode"] = telegram.ParseMode.HTML
+        return params

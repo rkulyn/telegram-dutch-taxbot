@@ -1,3 +1,4 @@
+import abc
 import telegram
 from operator import itemgetter
 
@@ -28,19 +29,11 @@ class ResponseMenuMixin:
             menu.append(footer_buttons)
         return menu
 
+    @classmethod
+    @abc.abstractmethod
+    def get_value_from_command(cls, command):
+        return None
+
     def get_pattern(self):
         items = "|".join(map(itemgetter(0), self.ITEMS))
         return "^{items}$".format(items=items)
-
-
-class ResponseMessageMixin:
-
-    @classmethod
-    def get_value_from_command(cls, command):
-        return command
-
-    def build_markup(self):
-        return None
-
-    def get_pattern(self):
-        return None
