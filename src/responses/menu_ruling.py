@@ -1,11 +1,10 @@
 import telegram
 from emoji import emojize
 
-from .base import ResponseBase
-from .mixins import ResponseMenuMixin
+from .base import MenuResponseBase
 
 
-class RulingMenuResponse(ResponseMenuMixin, ResponseBase):
+class RulingMenuResponse(MenuResponseBase):
 
     ITEMS = tuple(
         ("ruling{0}".format(p.capitalize()), p)
@@ -15,15 +14,17 @@ class RulingMenuResponse(ResponseMenuMixin, ResponseBase):
 
     @staticmethod
     def button_factory(command, value):
-        icon = {
+        icon_map = {
             "research": ":sunglasses:",
             "young": ":mortar_board:",
             "normal": ":briefcase:",
             "no": ":disappointed:"
-        }[value]
-        text = "Yes ({0})".format(value.capitalize()) if value != "no" else "No ruling"
+        }
+
+        label = value.capitalize()
+        text = f"Yes ({label})" if value != "no" else "No ruling"
         button = telegram.InlineKeyboardButton(
-            emojize("{icon} {text}".format(icon=icon, text=text), use_aliases=True),
+            emojize(f"{icon_map[value]} {text}", use_aliases=True),
             callback_data=command
         )
         return button
@@ -38,8 +39,8 @@ class RulingMenuResponse(ResponseMenuMixin, ResponseBase):
     def get_value_from_command(cls, command):
         return dict(cls.ITEMS).get(command, "no")
 
-    def get_params(self):
-        params = super().get_params()
-        params["text"] = self.get_text()
-        params["reply_markup"] = self.build_markup()
-        return params
+    def get_content(self, *args, **kwargs):
+        return {
+            "text": self.get_text(),
+            "reply_markup": self.build_markup(),
+        }

@@ -1,10 +1,10 @@
 import telegram
 from emoji import emojize
 
-from .base import ResponseBase
+from .base import MessageResponseBase
 
 
-class SalaryInputMessageResponse(ResponseBase):
+class SalaryInputMessageResponse(MessageResponseBase):
 
     def get_text(self):
 
@@ -16,8 +16,8 @@ class SalaryInputMessageResponse(ResponseBase):
         )
         return message
 
-    def get_params(self):
-        params = super().get_params()
-        params["text"] = self.get_text()
-        params["parse_mode"] = telegram.ParseMode.HTML
-        return params
+    def get_content(self, *args, **kwargs):
+        return {
+            "text": self.get_text(),
+            "parse_mode": telegram.ParseMode.HTML,
+        }

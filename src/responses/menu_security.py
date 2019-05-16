@@ -1,11 +1,10 @@
 import telegram
 from emoji import emojize
 
-from .base import ResponseBase
-from .mixins import ResponseMenuMixin
+from .base import MenuResponseBase
 
 
-class SocialSecurityMenuResponse(ResponseMenuMixin, ResponseBase):
+class SocialSecurityMenuResponse(MenuResponseBase):
 
     ITEMS = (
         ("socialSecurityInc", True),
@@ -17,7 +16,9 @@ class SocialSecurityMenuResponse(ResponseMenuMixin, ResponseBase):
     def button_factory(command, value):
         button = telegram.InlineKeyboardButton(
             emojize(
-                ":smile: Yes" if value else ":disappointed: No",
+                ":smile: Yes"
+                if value
+                else ":disappointed: No",
                 use_aliases=True
             ),
             callback_data=command
@@ -31,8 +32,8 @@ class SocialSecurityMenuResponse(ResponseMenuMixin, ResponseBase):
     def get_value_from_command(cls, command):
         return dict(cls.ITEMS).get(command, False)
 
-    def get_params(self):
-        params = super().get_params()
-        params["text"] = self.get_text()
-        params["reply_markup"] = self.build_markup()
-        return params
+    def get_content(self, *args, **kwargs):
+        return {
+            "text": self.get_text(),
+            "reply_markup": self.build_markup(),
+        }

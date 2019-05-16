@@ -1,10 +1,10 @@
 import telegram
 from emoji import emojize
 
-from .base import ResponseBase
+from .base import MessageResponseBase
 
 
-class GreetingMessageResponse(ResponseBase):
+class GreetingMessageResponse(MessageResponseBase):
 
     def get_text(self):
 
@@ -18,9 +18,9 @@ class GreetingMessageResponse(ResponseBase):
         )
         return message
 
-    def get_params(self):
-        params = super().get_params()
-        params["text"] = self.get_text()
-        params["parse_mode"] = telegram.ParseMode.HTML
-        params["disable_web_page_preview"] = True
-        return params
+    def get_content(self, *args, **kwargs):
+        return {
+            "text": self.get_text(),
+            "parse_mode": telegram.ParseMode.HTML,
+            "disable_web_page_preview": True,
+        }

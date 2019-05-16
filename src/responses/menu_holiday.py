@@ -1,11 +1,10 @@
 import telegram
 from emoji import emojize
 
-from .base import ResponseBase
-from .mixins import ResponseMenuMixin
+from .base import MenuResponseBase
 
 
-class HolidayAllowanceMenuResponse(ResponseMenuMixin, ResponseBase):
+class HolidayAllowanceMenuResponse(MenuResponseBase):
 
     ITEMS = (
         ("holidayAllowanceInc", True),
@@ -34,9 +33,9 @@ class HolidayAllowanceMenuResponse(ResponseMenuMixin, ResponseBase):
     def get_value_from_command(cls, command):
         return dict(cls.ITEMS).get(command, False)
 
-    def get_params(self):
-        params = super().get_params()
-        params["text"] = self.get_text()
-        params["reply_markup"] = self.build_markup()
-        params["parse_mode"] = telegram.ParseMode.HTML
-        return params
+    def get_content(self, *args, **kwargs):
+        return {
+            "text": self.get_text(),
+            "reply_markup": self.build_markup(),
+            "parse_mode": telegram.ParseMode.HTML,
+        }

@@ -1,11 +1,10 @@
 import telegram
 from emoji import emojize
 
-from .base import ResponseBase
-from .mixins import ResponseMenuMixin
+from .base import MenuResponseBase
 
 
-class WorkingHoursMenuResponse(ResponseMenuMixin, ResponseBase):
+class WorkingHoursMenuResponse(MenuResponseBase):
 
     ITEMS = tuple(
         ("workingHours{0}".format(h), h)
@@ -17,7 +16,7 @@ class WorkingHoursMenuResponse(ResponseMenuMixin, ResponseBase):
     def button_factory(command, value):
         icon = ":small_orange_diamond:" if value == 40 else ":small_blue_diamond:"
         button = telegram.InlineKeyboardButton(
-            emojize("{icon} {hours}".format(icon=icon, hours=value), use_aliases=True),
+            emojize(f"{icon} {value}", use_aliases=True),
             callback_data=command
         )
         return button
@@ -32,9 +31,9 @@ class WorkingHoursMenuResponse(ResponseMenuMixin, ResponseBase):
     def get_value_from_command(cls, command):
         return dict(cls.ITEMS).get(command, 40)
 
-    def get_params(self):
-        params = super().get_params()
-        params["text"] = self.get_text()
-        params["reply_markup"] = self.build_markup()
-        params["parse_mode"] = telegram.ParseMode.HTML
-        return params
+    def get_content(self, *args, **kwargs):
+        return {
+            "text": self.get_text(),
+            "reply_markup": self.build_markup(),
+            "parse_mode": telegram.ParseMode.HTML,
+        }

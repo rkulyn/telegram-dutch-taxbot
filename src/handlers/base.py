@@ -24,7 +24,7 @@ class HandlerBase(abc.ABC):
 
             bot.send_message(
                 chat_id=chat_id,
-                **response.get_params()
+                **response.get_body()
             )
 
     @abc.abstractmethod

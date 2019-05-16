@@ -1,11 +1,10 @@
 import telegram
 from emoji import emojize
 
-from .base import ResponseBase
-from .mixins import ResponseMenuMixin
+from .base import MenuResponseBase
 
 
-class YearMenuResponse(ResponseMenuMixin, ResponseBase):
+class YearMenuResponse(MenuResponseBase):
 
     ITEMS = tuple(
         ("year{0}".format(h), str(h))
@@ -17,7 +16,7 @@ class YearMenuResponse(ResponseMenuMixin, ResponseBase):
     def button_factory(command, value):
         icon = ":small_orange_diamond:" if value == "2019" else ":small_blue_diamond:"
         button = telegram.InlineKeyboardButton(
-            emojize("{icon} {year}".format(icon=icon, year=value), use_aliases=True),
+            emojize(f"{icon} {value}", use_aliases=True),
             callback_data=command
         )
         return button
@@ -29,8 +28,8 @@ class YearMenuResponse(ResponseMenuMixin, ResponseBase):
     def get_value_from_command(cls, command):
         return dict(cls.ITEMS).get(command, "2019")
 
-    def get_params(self):
-        params = super().get_params()
-        params["text"] = self.get_text()
-        params["reply_markup"] = self.build_markup()
-        return params
+    def get_content(self, *args, **kwargs):
+        return {
+            "text": self.get_text(),
+            "reply_markup": self.build_markup(),
+        }

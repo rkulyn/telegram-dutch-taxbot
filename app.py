@@ -27,11 +27,11 @@ from src.responses.message_help import HelpMessageResponse
 from src.responses.message_greeting import GreetingMessageResponse
 from src.responses.message_salary import SalaryInputMessageResponse
 
+from src.responses.result_pdf import PdfResultResponse
+from src.responses.result_txt import TxtResultResponse
+
 from src.handlers.base import HandlerBase
 from src.handlers.mixins import CallbackChatIdMixin, MessageChatIdMixin
-
-from src.outputs.output_pdf import PdfOutput
-from src.outputs.output_txt import TxtOutput
 
 
 config = get_config()
@@ -248,18 +248,18 @@ class ResultCallbackHandler(CallbackChatIdMixin, HandlerBase):
 
             if calc_result_type == "txt":
 
-                output = TxtOutput()
+                output = TxtResultResponse()
                 bot.send_message(
                     chat_id=chat_id,
-                    **output.get_params(calc_result_data)
+                    **output.get_body(data=calc_result_data)
                 )
 
             if calc_result_type == "pdf":
 
-                output = PdfOutput()
+                output = PdfResultResponse()
                 bot.send_document(
                     chat_id=chat_id,
-                    **output.get_params(calc_result_data)
+                    **output.get_body(data=calc_result_data)
                 )
 
         else:
