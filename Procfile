@@ -1,1 +1,1 @@
-bot: python3 taxbot/app.py
+bot: python3 app.py

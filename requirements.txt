@@ -5,7 +5,6 @@ cryptography==2.6.1
 emoji==0.5.2
 fpdf==1.7.2
 future==0.17.1
-gunicorn==19.9.0
 pycparser==2.19
 python-telegram-bot==11.1.0
 six==1.12.0
