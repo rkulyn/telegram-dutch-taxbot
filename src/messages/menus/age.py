@@ -5,7 +5,10 @@ from .base import MenuMessageBase
 
 
 class AgeMenuMessage(MenuMessageBase):
+    """
+    Send "Retirement Age" YES/NO menu.
 
+    """
     ITEMS = (
         ("upper65", True),
         ("lower65", False),
@@ -33,4 +36,8 @@ class AgeMenuMessage(MenuMessageBase):
         )
 
     def get_options(self):
+        """
+        Add HTML tags render support.
+
+        """
         return {"parse_mode": telegram.ParseMode.HTML}

@@ -20,6 +20,10 @@ from src.handlers.mixins import (
     MessageChatIdMixin
 )
 
+from src.handlers.decorators import (
+    update_menu_callback_user_input_data
+)
+
 from src.messages.menus.age import AgeMenuMessage
 from src.messages.menus.year import YearMenuMessage
 from src.messages.menus.period import PeriodMenuMessage
@@ -31,7 +35,9 @@ from src.messages.menus.holiday import HolidayAllowanceMenuMessage
 
 from src.messages.text.help import HelpTextMessage
 from src.messages.text.greeting import GreetingTextMessage
+from src.messages.text.ruling import RulingHelpTextMessage
 from src.messages.text.salary import SalaryInputTextMessage
+from src.messages.text.holiday import HolidayAllowanceHelpTextMessage
 
 from src.messages.results.txt import TXTResultMessage
 from src.messages.results.pdf import PDFResultMessage
@@ -66,139 +72,145 @@ class StartHandler(CallbackChatIdMixin, HandlerBase):
 class SalaryHandler(MessageChatIdMixin, HandlerBase):
     """
     Salary input handler.
-    Save valid "salary" value to user input data inside session.
+    Save valid "salary" value
+    to user input data inside session.
 
     """
     def handle(self, bot, update, **session_data):
         user_data = session_data["user_data"]
         value = float(update.message.text)
-
         user_data["input_data"]["salary"] = value
-
-        chat_id = self.get_chat_id(update)
-        logger.debug(f'Got value: "{value}". CHAT_ID: "{chat_id}".')
 
 
 class PeriodCallbackHandler(CallbackChatIdMixin, HandlerBase):
     """
-    Period input callback handler.
-    Save valid "period" value to user input data inside session.
+    Period menu callback handler.
+    Save valid "period" value
+    to user input data inside session.
 
     """
+    @update_menu_callback_user_input_data(
+        data_key="period",
+        menu=PeriodMenuMessage)
     def handle(self, bot, update, **session_data):
-        command = update.callback_query.data
-        value = PeriodMenuMessage.get_value_from_command(command)
-
-        user_data = session_data["user_data"]
-        user_data["input_data"]["period"] = value
-
-        chat_id = self.get_chat_id(update)
-        logger.debug(f'Got value: "{value}". CHAT_ID: "{chat_id}".')
+        """Handled by decorator"""
+        pass
 
 
 class YearCallbackHandler(CallbackChatIdMixin, HandlerBase):
     """
-    Year input callback handler.
-    Save valid "year" value to user input data inside session.
+    Year menu callback handler.
+    Save valid "year" value
+    to user input data inside session.
 
     """
+    @update_menu_callback_user_input_data(
+        data_key="year",
+        menu=YearMenuMessage)
     def handle(self, bot, update, **session_data):
-        command = update.callback_query.data
-        value = YearMenuMessage.get_value_from_command(command)
-
-        user_data = session_data["user_data"]
-        user_data["input_data"]["year"] = value
-
-        chat_id = self.get_chat_id(update)
-        logger.debug(f'Got value: "{value}". CHAT_ID: "{chat_id}".')
+        """Handled by decorator"""
+        pass
 
 
 class HolidayAllowanceCallbackHandler(CallbackChatIdMixin, HandlerBase):
     """
-    Holiday allowance flag callback handler.
-    Save valid "holiday allowance" value to user input data inside session.
+    Holiday allowance menu callback handler.
+    Save valid "holiday allowance" value
+    to user input data inside session.
 
     """
+    @update_menu_callback_user_input_data(
+        data_key="holiday_allowance",
+        menu=HolidayAllowanceMenuMessage)
     def handle(self, bot, update, **session_data):
-        command = update.callback_query.data
-        value = HolidayAllowanceMenuMessage.get_value_from_command(command)
-
-        user_data = session_data["user_data"]
-        user_data["input_data"]["holiday_allowance"] = value
-
-        chat_id = self.get_chat_id(update)
-        logger.debug(f'Got value: "{value}". CHAT_ID: "{chat_id}".')
+        """Handled by decorator"""
+        pass
 
 
 class SocialSecurityCallbackHandler(CallbackChatIdMixin, HandlerBase):
     """
-    Social security flag callback handler.
-    Save valid "social security" value to user input data inside session.
+    Social security menu callback handler.
+    Save valid "social security" value
+    to user input data inside session.
 
     """
+    @update_menu_callback_user_input_data(
+        data_key="social_security",
+        menu=SocialSecurityMenuMessage)
     def handle(self, bot, update, **session_data):
-        command = update.callback_query.data
-        value = SocialSecurityMenuMessage.get_value_from_command(command)
-
-        user_data = session_data["user_data"]
-        user_data["input_data"]["social_security"] = value
-
-        chat_id = self.get_chat_id(update)
-        logger.debug(f'Got value: "{value}". CHAT_ID: "{chat_id}".')
+        """Handled by decorator"""
+        pass
 
 
 class AgeCallbackHandler(CallbackChatIdMixin, HandlerBase):
     """
-    Retirement age flag callback handler.
-    Save valid "retirement age" value to user input data inside session.
+    Retirement age menu callback handler.
+    Save valid "retirement age" value
+    to user input data inside session.
 
     """
+    @update_menu_callback_user_input_data(
+        data_key="age",
+        menu=AgeMenuMessage)
     def handle(self, bot, update, **session_data):
-        command = update.callback_query.data
-        value = AgeMenuMessage.get_value_from_command(command)
-
-        user_data = session_data["user_data"]
-        user_data["input_data"]["age"] = value
-
-        chat_id = self.get_chat_id(update)
-        logger.debug(f'Got value: "{value}". CHAT_ID: "{chat_id}".')
+        """Handled by decorator"""
+        pass
 
 
 class RulingCallbackHandler(CallbackChatIdMixin, HandlerBase):
     """
-    Ruling flag callback handler.
-    Save valid "ruling" value to user input data inside session.
+    Ruling menu callback handler.
+    Save valid "ruling" value
+    to user input data inside session.
 
     """
+    @update_menu_callback_user_input_data(
+        data_key="ruling",
+        menu=RulingMenuMessage)
     def handle(self, bot, update, **session_data):
-        command = update.callback_query.data
-        value = RulingMenuMessage.get_value_from_command(command)
-
-        user_data = session_data["user_data"]
-        user_data["input_data"]["ruling"] = value
-
-        chat_id = self.get_chat_id(update)
-        logger.debug(f'Got value: "{value}". CHAT_ID: "{chat_id}".')
+        """Handled by decorator"""
+        pass
 
 
 class WorkingHoursCallbackHandler(CallbackChatIdMixin, HandlerBase):
     """
-    Working hours callback handler.
-    Save valid "working hours" value to user input data inside session.
+    Working hours menu callback handler.
+    Save valid "working hours" value
+    to user input data inside session.
 
     """
+    @update_menu_callback_user_input_data(
+        data_key="working_hours",
+        menu=WorkingHoursMenuMessage)
     def handle(self, bot, update, **session_data):
-        command = update.callback_query.data
-        value = WorkingHoursMenuMessage.get_value_from_command(command)
-
-        user_data = session_data["user_data"]
-        user_data["input_data"]["working_hours"] = value
-
-        chat_id = self.get_chat_id(update)
-        logger.debug(f'Got value: "{value}". CHAT_ID: "{chat_id}".')
+        """Handled by decorator"""
+        pass
 
 
 class ResultCallbackHandler(CallbackChatIdMixin, HandlerBase):
+    """
+    Result menu callback handler.
+    Calculate result data
+    and send to user in specified format.
+
+    """
+    @staticmethod
+    def calculate_result_data(input_data):
+        """
+        Calculate result data
+        for given user input data.
+
+        Args:
+            input_data (dict): User input data.
+
+        Returns:
+            (dict): Calculated tax data.
+
+        """
+        loader = JsonDataLoader(path=config.DATA_PATH)
+        calculator = TaxCalculator(loader, **input_data)
+        result = calculator.calculate()
+        return result
 
     def handle(self, bot, update, **session_data):
 
@@ -214,9 +226,7 @@ class ResultCallbackHandler(CallbackChatIdMixin, HandlerBase):
             command = update.callback_query.data
             result_type = ResultMenuMessage.get_value_from_command(command)
 
-            loader = JsonDataLoader(path="data.json")
-            calculator = TaxCalculator(loader, **input_data)
-            result_data = calculator.calculate()
+            result_data = self.calculate_result_data(input_data)
 
             user_data["result"]["calc_result_type"] = result_type
             user_data["result"]["calc_result_data"] = result_data
@@ -255,9 +265,25 @@ class HelpHandler(CallbackChatIdMixin, HandlerBase):
     Just send simple text response.
 
     """
-    def handle(self, bot, update, **session_data):
-        chat_id = self.get_chat_id(update)
-        logger.debug(f'Help requested. CHAT_ID: "{chat_id}".')
+    pass
+
+
+class RulingHelpHandler(CallbackChatIdMixin, HandlerBase):
+    """
+    Ruling Help command handler.
+    Just send simple text response.
+
+    """
+    pass
+
+
+class HolidayAllowanceHelpHandler(CallbackChatIdMixin, HandlerBase):
+    """
+    Holiday Allowance Help command handler.
+    Just send simple text response.
+
+    """
+    pass
 
 
 class DefaultHandler(MessageChatIdMixin, HandlerBase):
@@ -318,7 +344,9 @@ def main():
     # # Define text messages
     help_text_msg = HelpTextMessage()
     greeting_text_msg = GreetingTextMessage()
+    ruling_text_msg = RulingHelpTextMessage()
     salary_text_msg = SalaryInputTextMessage()
+    holiday_text_msg = HolidayAllowanceHelpTextMessage()
 
     # Define handlers
 
@@ -373,6 +401,16 @@ def main():
     # Help handler
     help_handler = HelpHandler(
         messages=(help_text_msg,)
+    )
+
+    # Ruling help handler
+    ruling_help_handler = RulingHelpHandler(
+        messages=(ruling_text_msg,)
+    )
+
+    # Holiday allowance help handler
+    holiday_help_handler = HolidayAllowanceHelpHandler(
+        messages=(holiday_text_msg,)
     )
 
     # Default handler.
@@ -445,6 +483,16 @@ def main():
     dp.add_handler(CommandHandler(
         command="help",
         callback=help_handler
+    ))
+
+    dp.add_handler(CommandHandler(
+        command="ruling",
+        callback=ruling_help_handler
+    ))
+
+    dp.add_handler(CommandHandler(
+        command="holiday",
+        callback=holiday_help_handler
     ))
 
     dp.add_handler(MessageHandler(

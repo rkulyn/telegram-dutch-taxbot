@@ -5,7 +5,11 @@ from .exceptions import DataLoadException
 
 
 class JsonDataLoader:
+    """
+    Load base calculation data
+    from provided JSON file.
 
+    """
     def __init__(self, path):
         self._path = path
 

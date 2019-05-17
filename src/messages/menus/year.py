@@ -5,7 +5,11 @@ from .base import MenuMessageBase
 
 
 class YearMenuMessage(MenuMessageBase):
+    """
+    Send "Calculation year" menu.
+    Define set of buttons: "2019", "2018", "2017", "2016".
 
+    """
     ITEMS = tuple(
         ("year{0}".format(h), str(h))
         for h in range(2019, 2015, -1)

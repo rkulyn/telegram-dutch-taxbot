@@ -5,7 +5,11 @@ from .base import MenuMessageBase
 
 
 class RulingMenuMessage(MenuMessageBase):
+    """
+    Send "Ruling" menu.
+    Define set of buttons: "Research", "Young", "Normal", "No ruling".
 
+    """
     ITEMS = tuple(
         ("ruling{0}".format(p.capitalize()), p)
         for p in ("research", "young", "normal", "no")
@@ -31,7 +35,19 @@ class RulingMenuMessage(MenuMessageBase):
         return button
 
     def get_text(self):
-        return (
+        return emojize(
             "Is 30% ruling applied? \n"
-            "(Tax benefit rule for up-to 30% of gross salary)."
+            "<i>(Tax benefit rule for up-to 30% of gross salary).</i> \n\n"
+            ":small_orange_diamond: <b>Research:</b> Scientific researchers and training medical specialists. \n"
+            ":small_orange_diamond: <b>Young:</b> PhD and Master’s graduates younger 30 years. \n"
+            ":small_orange_diamond: <b>Normal:</b> Other specialists who met minimum salary requirements. \n\n"
+            ":point_right: Type /help or /ruling to get more details. \n\n",
+            use_aliases=True
         )
+
+    def get_options(self):
+        """
+        Add HTML tags render support.
+
+        """
+        return {"parse_mode": telegram.ParseMode.HTML}

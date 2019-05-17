@@ -5,7 +5,10 @@ from .base import MenuMessageBase
 
 
 class HolidayAllowanceMenuMessage(MenuMessageBase):
+    """
+    Send "Holiday Allowance" YES/NO menu.
 
+    """
     ITEMS = (
         ("holidayAllowanceInc", True),
         ("holidayAllowanceExc", False),
@@ -27,10 +30,16 @@ class HolidayAllowanceMenuMessage(MenuMessageBase):
         return button
 
     def get_text(self):
-        return (
+        return emojize(
             "Is holiday allowance included? \n"
-            "<i>(Gross salary provided includes 8% of holiday allowance).</i>"
+            "<i>(Gross salary provided includes 8% of holiday allowance).</i> \n\n"
+            ":point_right: Type /help or /holiday to get more details. \n\n",
+            use_aliases=True
         )
 
     def get_options(self):
+        """
+        Add HTML tags render support.
+
+        """
         return {"parse_mode": telegram.ParseMode.HTML}

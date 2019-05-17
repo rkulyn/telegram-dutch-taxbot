@@ -5,7 +5,10 @@ from .base import TextMessageBase
 
 
 class SalaryInputTextMessage(TextMessageBase):
+    """
+    Salary input message.
 
+    """
     def get_text(self):
 
         message = emojize(
@@ -17,4 +20,8 @@ class SalaryInputTextMessage(TextMessageBase):
         return message
 
     def get_options(self):
+        """
+        Add HTML tags render support.
+
+        """
         return {"parse_mode": telegram.ParseMode.HTML}

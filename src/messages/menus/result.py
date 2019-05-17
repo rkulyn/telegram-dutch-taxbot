@@ -5,7 +5,11 @@ from .base import MenuMessageBase
 
 
 class ResultMenuMessage(MenuMessageBase):
+    """
+    Send "Result showing type" menu.
+    Define set of buttons: "As message", "As PDF".
 
+    """
     ITEMS = (
         ("resultTXT", "txt"),
         ("resultPDF", "pdf"),

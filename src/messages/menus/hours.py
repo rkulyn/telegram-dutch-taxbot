@@ -5,7 +5,11 @@ from .base import MenuMessageBase
 
 
 class WorkingHoursMenuMessage(MenuMessageBase):
+    """
+    Send "Working Hours" menu.
+    Define set of buttons from 4 to 64 with step=4.
 
+    """
     ITEMS = tuple(
         ("workingHours{0}".format(h), h)
         for h in range(4, 84, 4)
@@ -29,4 +33,8 @@ class WorkingHoursMenuMessage(MenuMessageBase):
         )
 
     def get_options(self):
+        """
+        Add HTML tags render support.
+
+        """
         return {"parse_mode": telegram.ParseMode.HTML}

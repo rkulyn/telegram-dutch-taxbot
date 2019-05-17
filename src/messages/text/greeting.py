@@ -5,7 +5,10 @@ from .base import TextMessageBase
 
 
 class GreetingTextMessage(TextMessageBase):
+    """
+    Greeting message.
 
+    """
     def get_text(self):
 
         message = emojize(
@@ -19,6 +22,11 @@ class GreetingTextMessage(TextMessageBase):
         return message
 
     def get_options(self):
+        """
+        Disable link preview.
+        Add HTML tags render support.
+
+        """
         return {
             "disable_web_page_preview": True,
             "parse_mode": telegram.ParseMode.HTML,

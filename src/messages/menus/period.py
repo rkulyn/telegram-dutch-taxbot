@@ -5,7 +5,11 @@ from .base import MenuMessageBase
 
 
 class PeriodMenuMessage(MenuMessageBase):
+    """
+    Send "Salary income period" menu.
+    Define set of buttons: "Year", "Month", "Day", "Hour".
 
+    """
     ITEMS = tuple(
         ("period{0}".format(p.capitalize()), p)
         for p in ("year", "month", "day", "hour")

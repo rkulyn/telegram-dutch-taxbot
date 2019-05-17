@@ -5,7 +5,10 @@ from .base import MenuMessageBase
 
 
 class SocialSecurityMenuMessage(MenuMessageBase):
+    """
+    Send "Social Security" YES/NO menu.
 
+    """
     ITEMS = (
         ("socialSecurityInc", True),
         ("socialSecurityExc", False),
