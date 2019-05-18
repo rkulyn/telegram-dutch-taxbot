@@ -33,7 +33,7 @@ class TXTResultMessage(TextResultMessageBase):
             value = f"{value:.2f}" if isinstance(value, numbers.Number) else value
 
             line = emojize(
-                f":small_orange_diamond: {label}: \n"
+                f":small_orange_diamond: {label} \n"
                 f":white_small_square: <b>{value}</b> \n"
                 "------------------  \n",
                 use_aliases=True

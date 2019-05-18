@@ -29,7 +29,7 @@ class WorkingHoursMenuMessage(MenuMessageBase):
     def get_text(self):
         return (
             "Choose working hours per week \n"
-            "<i>(usually 40)</i>."
+            "<i>(Usually 40: 8 hours per day, 5 working days)</i>"
         )
 
     def get_options(self):

@@ -32,7 +32,7 @@ class AgeMenuMessage(MenuMessageBase):
     def get_text(self):
         return (
             "Are you 65 years or older? \n"
-            "<i>(Retirement age or older).</i>"
+            "<i>(Retirement age or older)</i>"
         )
 
     def get_options(self):

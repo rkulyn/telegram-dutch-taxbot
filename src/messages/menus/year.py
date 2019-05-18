@@ -27,4 +27,14 @@ class YearMenuMessage(MenuMessageBase):
         return button
 
     def get_text(self):
-        return "Choose calculation year."
+        return (
+            "Choose calculation year. \n"
+            "<i>(Value is used to get government data to make calculations)</i>"
+        )
+
+    def get_options(self):
+        """
+        Add HTML tags render support.
+
+        """
+        return {"parse_mode": telegram.ParseMode.HTML}

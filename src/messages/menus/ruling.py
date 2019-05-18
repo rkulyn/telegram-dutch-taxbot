@@ -37,11 +37,12 @@ class RulingMenuMessage(MenuMessageBase):
     def get_text(self):
         return emojize(
             "Is 30% ruling applied? \n"
-            "<i>(Tax benefit rule for up-to 30% of gross salary).</i> \n\n"
+            "<i>(Tax benefit rule for up-to 30% of gross salary)</i> \n\n"
             ":small_orange_diamond: <b>Research:</b> Scientific researchers and training medical specialists. \n"
             ":small_orange_diamond: <b>Young:</b> PhD and Master’s graduates younger 30 years. \n"
             ":small_orange_diamond: <b>Normal:</b> Other specialists who met minimum salary requirements. \n\n"
-            ":point_right: Type /help or /ruling to get more details. \n\n",
+            ":point_right: Type /help to get help. \n"
+            ":point_right: Type /ruling to get ruling details. \n\n",
             use_aliases=True
         )
 

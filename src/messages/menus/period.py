@@ -32,4 +32,17 @@ class PeriodMenuMessage(MenuMessageBase):
         return button
 
     def get_text(self):
-        return "Please choose salary period."
+        return emojize(
+            "Please choose salary period. \n"
+            ":exclamation: <b>PLEASE NOTE</b> :exclamation: \n"
+            "Entered value should be corresponded with salary value "
+            "that was asked at the previous step. \n",
+            use_aliases=True
+        )
+
+    def get_options(self):
+        """
+        Add HTML tags render support.
+
+        """
+        return {"parse_mode": telegram.ParseMode.HTML}

@@ -13,8 +13,11 @@ class SalaryInputTextMessage(TextMessageBase):
 
         message = emojize(
             "Please enter <b>GROSS</b> salary in EUR \n"
-            "Example: 40000.50 \n"
-            "<i>Default 36000</i> :euro::point_down:",
+            "Examples: 60000, 1520.50, 301, 35.95. \n"
+            ":exclamation: <b>PLEASE NOTE</b> :exclamation: \n"
+            "Entered value should be corresponded with period "
+            "(per year, per month, per day, per hour) "
+            "that will be asked at the next step. \n",
             use_aliases=True
         )
         return message

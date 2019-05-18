@@ -26,7 +26,8 @@ class HolidayAllowanceHelpTextMessage(TextMessageBase):
             "you will get a total sum of <b>3840 EUR</b> in the month of May.\n"
             "The calculation looks like this: <b>4000 x 12 = 48000 EUR</b>. \n"
             "The 8% holiday allowance of this total amount is <b>48000 x 8% = 3840 EUR</b>.\n\n"
-            "Type /start to start calculation or /help get more details.\n\n",
+            "Type /start to start calculation. \n"
+            "Type /help get more details.\n\n",
             use_aliases=True
         )
         return message

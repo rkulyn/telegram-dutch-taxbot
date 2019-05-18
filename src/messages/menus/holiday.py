@@ -33,7 +33,8 @@ class HolidayAllowanceMenuMessage(MenuMessageBase):
         return emojize(
             "Is holiday allowance included? \n"
             "<i>(Gross salary provided includes 8% of holiday allowance).</i> \n\n"
-            ":point_right: Type /help or /holiday to get more details. \n\n",
+            ":point_right: Type /help to get help. \n"
+            ":point_right: Type /holiday to allowance details. \n\n",
             use_aliases=True
         )
 
