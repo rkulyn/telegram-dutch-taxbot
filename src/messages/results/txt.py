@@ -27,7 +27,7 @@ class TXTResultMessage(TextResultMessageBase):
             use_aliases=True
         )
 
-        for label, value in data.items():
+        for label, value in self.convert_result_to_readable(data).items():
 
             # Round number to 2 digit fraction.
             value = f"{value:.2f}" if isinstance(value, numbers.Number) else value

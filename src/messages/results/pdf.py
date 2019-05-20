@@ -77,7 +77,7 @@ class PDFResultMessage(FileResultMessageBase):
         # Define row size = font size
         row_height = pdf.font_size
 
-        for label, value in data.items():
+        for label, value in self.convert_result_to_readable(data).items():
 
             # Round numbers to 2 digit fraction.
             value = f"{value:.2f}" if isinstance(value, numbers.Number) else value

@@ -1,5 +1,9 @@
 import abc
 
+from collections import OrderedDict
+
+from .constants import RESULT_KEY_MAP
+
 
 class ResultMessageBase:
     """
@@ -29,6 +33,26 @@ class ResultMessageBase:
 
         """
         return {}
+
+    @staticmethod
+    def convert_result_to_readable(result):
+        """
+        Convert result keys to convenient format.
+
+        Args:
+            result (OrderedDict): Raw result data.
+
+        Returns:
+            (OrderedDict): Converted result data.
+
+        """
+        converted = OrderedDict()
+
+        for key, value in result.items():
+            if key in RESULT_KEY_MAP:
+                converted[RESULT_KEY_MAP[key]] = value
+
+        return converted
 
 
 class FileResultMessageBase(ResultMessageBase):

@@ -11,8 +11,8 @@ class HandlerBase(abc.ABC):
         self._messages = messages or tuple()
         self._emulate_typing = emulate_typing
 
-    @abc.abstractmethod
-    def get_chat_id(self, update):
+    @staticmethod
+    def get_chat_id(update):
         """
         Get chat ID from incoming update.
 
@@ -23,7 +23,15 @@ class HandlerBase(abc.ABC):
             (int): Chat ID.
 
         """
-        pass
+        # Simple messages
+        if update.message:
+            return update.message.chat_id
+
+        # Menu callbacks
+        if update.callback_query:
+            return update.callback_query.message.chat_id
+
+        return None
 
     @staticmethod
     def emulate_typing(bot, chat_id):

@@ -1,9 +1,16 @@
 import math
 from collections import OrderedDict
 
+from .utils import bool2yesno
+
 
 class TaxCalculator:
+    """
+    Tax calculator.
+    Get user input data, base government tax data
+    and calculate results.
 
+    """
     def __init__(
             self,
             loader,
@@ -30,10 +37,36 @@ class TaxCalculator:
 
     @staticmethod
     def get_ruling_income(tax_data, year, ruling):
+        """
+        Get ruling threshold from base government tax data
+        by year and ruling type.
+
+        Args:
+            tax_data (dict): Government tax data.
+            year (str): Calculation year.
+            ruling (str): Ruling type: "normal". "young", "research".
+
+        Returns:
+            (Number): Ruling threshold.
+
+        """
         return tax_data["rulingThreshold"][year][ruling]
 
     @classmethod
     def get_payroll_tax(cls, tax_data, year, salary):
+        """
+        Get payroll tax min, max and rate from base government tax data
+        and calculate tax value.
+
+        Args:
+            tax_data (dict): Government tax data.
+            year (str): Calculation year.
+            salary (Number): Salary value.
+
+        Returns:
+            (Number): Payroll tax value.
+
+        """
         return cls.get_rates(
             brackets=tax_data["payrollTax"][year],
             salary=salary,
@@ -42,6 +75,20 @@ class TaxCalculator:
 
     @classmethod
     def get_social_tax(cls, tax_data, year, salary, age):
+        """
+        Get social tax percent from base government tax data
+        and calculate tax value.
+
+        Args:
+            tax_data (dict): Government tax data.
+            year (str): Calculation year.
+            salary (Number): Salary value.
+            age (bool): True if user is older 65 years, False otherwise.
+
+        Returns:
+            (Number): Social tax value.
+
+        """
         return cls.get_rates(
             brackets=tax_data["socialPercent"][year],
             salary=salary,
@@ -50,6 +97,19 @@ class TaxCalculator:
 
     @classmethod
     def get_general_credit(cls, tax_data, year, salary):
+        """
+        Get general credit min, max and rate from base government tax data
+        and calculate credit value.
+
+        Args:
+            tax_data (dict): Government tax data.
+            year (str): Calculation year.
+            salary (Number): Salary value.
+
+        Returns:
+            (Number): General credit value.
+
+        """
         return cls.get_rates(
             brackets=tax_data["generalCredit"][year],
             salary=salary,
@@ -58,6 +118,19 @@ class TaxCalculator:
 
     @classmethod
     def get_labour_credit(cls, tax_data, year, salary):
+        """
+        Get labour credit min, max and rate from base government tax data
+        and calculate credit value.
+
+        Args:
+            tax_data (dict): Government tax data.
+            year (str): Calculation year.
+            salary (Number): Salary value.
+
+        Returns:
+            (Number): Labour credit value.
+
+        """
         return cls.get_rates(
             brackets=tax_data["labourCredit"][year],
             salary=salary,
@@ -67,18 +140,17 @@ class TaxCalculator:
     @staticmethod
     def get_social_credit(tax_data, year, age, social_security):
         """
-          * JSON properties for socialPercent object
-          * rate: Higher full rate including social contributions to be used to get proportion
-          * social: Percentage of social contributions (AOW + Anw + Wlz)
-          * older: Percentage for retirement age (Anw + Wlz, no contribution to AOW)
+        Get social credit percentage from base government tax data
+        and calculate credit value.
 
         Args:
-            tax_data:
-            year:
-            age:
-            social_security:
+            tax_data (dict): Government tax data.
+            year (str): Calculation year.
+            age (bool): True is user is older 65 years, False otherwise.
+            social_security (bool): True if social security is applied, False otherwise.
 
         Returns:
+            (Number): Social credit percentage.
 
         """
         percentage = 1
@@ -86,16 +158,30 @@ class TaxCalculator:
 
         if not social_security:
             # Removing AOW + Anw + Wlz from total
+            # Percentage of social contributions (AOW + Anw + Wlz)
             percentage = (bracket["rate"] - bracket["social"]) / bracket["rate"]
         elif age:
             # Removing only AOW from total
+            # Percentage for retirement age (Anw + Wlz, no contribution to AOW)
             percentage = (bracket["rate"] + bracket["older"] - bracket["social"]) / bracket["rate"]
 
         return percentage
 
     @staticmethod
     def get_rates(brackets, salary, rate_type):
+        """
+        Helper method to calculate rates
+        for Payroll Tax, Social Tax, General Credit, Labour Credit.
 
+        Args:
+            brackets (list[dict]): Data brackets by year with min, max and rate values.
+            salary (Number): Salary value.
+            rate_type (str): Rate type: "rate", "older", "social".
+
+        Returns:
+            (Number): Calculated amount.
+
+        """
         amount = 0
 
         for bracket in brackets:
@@ -113,18 +199,24 @@ class TaxCalculator:
         return amount
 
     def calculate(self):
+        """
+        Main calculation method.
 
+        Returns:
+            (OrderedDict): Calculation results.
+
+        """
         result = OrderedDict()
 
         # Add initial data to result
-        result["Calc Income (EUR)"] = self._salary
-        result["Calc Period"] = self._period.capitalize()
-        result["Calc Year"] = self._year
-        result["Holiday Allowance ?"] = "Yes" if self._holiday_allowance else "No"
-        result["Social Security ?"] = "Yes" if self._holiday_allowance else "No"
-        result["Older 65 ?"] = "Yes" if self._age else "No"
-        result["Ruling ?"] = self._ruling.capitalize()
-        result["Working Hours (per week)"] = self._working_hours
+        result["initial_income"] = self._salary
+        result["initial_period"] = self._period.capitalize()
+        result["initial_year"] = self._year
+        result["initial_ha"] = bool2yesno(self._holiday_allowance)
+        result["initial_ss"] = bool2yesno(self._social_security)
+        result["initial_age"] = bool2yesno(self._age)
+        result["initial_ruling"] = self._ruling.capitalize()
+        result["initial_wh"] = self._working_hours
 
         # Calculation part
         salary_by_period = dict.fromkeys(("year", "month", "day", "hour"), 0)
@@ -159,14 +251,14 @@ class TaxCalculator:
         taxable_year = math.floor(taxable_year)
 
         # Add calculated data to result
-        result["Year Gross Holiday Allowance (EUR)"] = gross_allowance
-        result["Year Gross Income (EUR)"] = math.floor(gross_year)
-        result["Month Gross Income (EUR)"] = math.floor(gross_year / 12)
-        result["Day Gross Income (EUR)"] = math.floor(gross_year / self._tax_data["workingDays"])
-        result["Hour Gross Income (EUR)"] = math.floor(gross_year / (self._tax_data["workingWeeks"] * self._working_hours))
-        result["Tax Free Income (EUR)"] = math.floor(tax_free_year)
-        result["Ruling Real Percentage (%)"] = math.floor(tax_free_year / gross_year * 100)
-        result["Taxable Income (EUR)"] = taxable_year
+        result["calculated_year_gross_ha"] = gross_allowance
+        result["calculated_year_gross_income"] = math.floor(gross_year)
+        result["calculated_month_gross_income"] = math.floor(gross_year / 12)
+        result["calculated_day_gross_income"] = math.floor(gross_year / self._tax_data["workingDays"])
+        result["calculated_hour_gross_income"] = math.floor(gross_year / (self._tax_data["workingWeeks"] * self._working_hours))
+        result["calculated_tax_free_income"] = math.floor(tax_free_year)
+        result["calculated_ruling_percentage"] = math.floor(tax_free_year / gross_year * 100)
+        result["calculated_taxable_income"] = taxable_year
 
         payroll_tax = -1 * self.get_payroll_tax(
             tax_data=self._tax_data,
@@ -206,15 +298,15 @@ class TaxCalculator:
 
         net_year = taxable_year + income_tax + tax_free_year
 
-        result["Payroll Tax (EUR)"] = payroll_tax
-        result["Social Security Tax (EUR)"] = social_tax
-        result["General Tax Credit (EUR)"] = general_credit
-        result["Labour Tax Credit (EUR)"] = labour_credit
-        result["Total Income Tax (EUR)"] = income_tax
-        result["Year Net Holiday Allowance (EUR)"] = math.floor(net_year * (0.08 / 1.08)) if self._holiday_allowance else 0
-        result["Year Net Income (EUR)"] = net_year
-        result["Month Net Income (EUR)"] = math.floor(net_year / 12)
-        result["Day Net Income (EUR)"] = math.floor(net_year / self._tax_data["workingDays"])
-        result["Hour Net Income (EUR)"] = math.floor(net_year / (self._tax_data["workingWeeks"] * self._working_hours))
+        result["calculated_payroll_tax"] = payroll_tax
+        result["calculated_ss_tax"] = social_tax
+        result["calculated_general_tax_credit"] = general_credit
+        result["calculated_labour_tax_credit"] = labour_credit
+        result["calculated_total_income_tax"] = income_tax
+        result["calculated_year_net_ha"] = math.floor(net_year * (0.08 / 1.08)) if self._holiday_allowance else 0
+        result["calculated_year_net_income"] = net_year
+        result["calculated_month_net_income"] = math.floor(net_year / 12)
+        result["calculated_day_net_income"] = math.floor(net_year / self._tax_data["workingDays"])
+        result["calculated_hour_net_income"] = math.floor(net_year / (self._tax_data["workingWeeks"] * self._working_hours))
 
         return result

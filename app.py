@@ -15,10 +15,6 @@ from src.calc import TaxCalculator
 from src.loaders.loader_json import JsonDataLoader
 
 from src.handlers.base import HandlerBase
-from src.handlers.mixins import (
-    CallbackChatIdMixin,
-    MessageChatIdMixin
-)
 
 from src.handlers.decorators import (
     update_menu_callback_user_input_data
@@ -54,7 +50,7 @@ logging.basicConfig(
 logger = logging.getLogger("Bot")
 
 
-class StartHandler(CallbackChatIdMixin, HandlerBase):
+class StartHandler(HandlerBase):
     """
     Start bot command handler.
     Set initial user input data.
@@ -69,7 +65,7 @@ class StartHandler(CallbackChatIdMixin, HandlerBase):
         session_data["user_data"]["input_data"] = {}
 
 
-class SalaryHandler(MessageChatIdMixin, HandlerBase):
+class SalaryHandler(HandlerBase):
     """
     Salary input handler.
     Save valid "salary" value
@@ -82,7 +78,7 @@ class SalaryHandler(MessageChatIdMixin, HandlerBase):
         user_data["input_data"]["salary"] = value
 
 
-class PeriodCallbackHandler(CallbackChatIdMixin, HandlerBase):
+class PeriodCallbackHandler(HandlerBase):
     """
     Period menu callback handler.
     Save valid "period" value
@@ -97,7 +93,7 @@ class PeriodCallbackHandler(CallbackChatIdMixin, HandlerBase):
         pass
 
 
-class YearCallbackHandler(CallbackChatIdMixin, HandlerBase):
+class YearCallbackHandler(HandlerBase):
     """
     Year menu callback handler.
     Save valid "year" value
@@ -112,7 +108,7 @@ class YearCallbackHandler(CallbackChatIdMixin, HandlerBase):
         pass
 
 
-class HolidayAllowanceCallbackHandler(CallbackChatIdMixin, HandlerBase):
+class HolidayAllowanceCallbackHandler(HandlerBase):
     """
     Holiday allowance menu callback handler.
     Save valid "holiday allowance" value
@@ -127,7 +123,7 @@ class HolidayAllowanceCallbackHandler(CallbackChatIdMixin, HandlerBase):
         pass
 
 
-class SocialSecurityCallbackHandler(CallbackChatIdMixin, HandlerBase):
+class SocialSecurityCallbackHandler(HandlerBase):
     """
     Social security menu callback handler.
     Save valid "social security" value
@@ -142,7 +138,7 @@ class SocialSecurityCallbackHandler(CallbackChatIdMixin, HandlerBase):
         pass
 
 
-class AgeCallbackHandler(CallbackChatIdMixin, HandlerBase):
+class AgeCallbackHandler(HandlerBase):
     """
     Retirement age menu callback handler.
     Save valid "retirement age" value
@@ -157,7 +153,7 @@ class AgeCallbackHandler(CallbackChatIdMixin, HandlerBase):
         pass
 
 
-class RulingCallbackHandler(CallbackChatIdMixin, HandlerBase):
+class RulingCallbackHandler(HandlerBase):
     """
     Ruling menu callback handler.
     Save valid "ruling" value
@@ -172,7 +168,7 @@ class RulingCallbackHandler(CallbackChatIdMixin, HandlerBase):
         pass
 
 
-class WorkingHoursCallbackHandler(CallbackChatIdMixin, HandlerBase):
+class WorkingHoursCallbackHandler(HandlerBase):
     """
     Working hours menu callback handler.
     Save valid "working hours" value
@@ -187,7 +183,7 @@ class WorkingHoursCallbackHandler(CallbackChatIdMixin, HandlerBase):
         pass
 
 
-class ResultCallbackHandler(CallbackChatIdMixin, HandlerBase):
+class ResultCallbackHandler(HandlerBase):
     """
     Result menu callback handler.
     Calculate result data
@@ -259,7 +255,7 @@ class ResultCallbackHandler(CallbackChatIdMixin, HandlerBase):
             logger.debug(f'Data is out of date. CHAT_ID: "{chat_id}".')
 
 
-class HelpHandler(CallbackChatIdMixin, HandlerBase):
+class HelpHandler(HandlerBase):
     """
     Help command handler.
     Just send simple text response.
@@ -268,7 +264,7 @@ class HelpHandler(CallbackChatIdMixin, HandlerBase):
     pass
 
 
-class RulingHelpHandler(CallbackChatIdMixin, HandlerBase):
+class RulingHelpHandler(HandlerBase):
     """
     Ruling Help command handler.
     Just send simple text response.
@@ -277,7 +273,7 @@ class RulingHelpHandler(CallbackChatIdMixin, HandlerBase):
     pass
 
 
-class HolidayAllowanceHelpHandler(CallbackChatIdMixin, HandlerBase):
+class HolidayAllowanceHelpHandler(HandlerBase):
     """
     Holiday Allowance Help command handler.
     Just send simple text response.
@@ -286,7 +282,7 @@ class HolidayAllowanceHelpHandler(CallbackChatIdMixin, HandlerBase):
     pass
 
 
-class DefaultHandler(MessageChatIdMixin, HandlerBase):
+class DefaultHandler(HandlerBase):
     """
     Default handler. Catch all invalid inputs from user.
     Just send dimple text response.
