@@ -16,10 +16,6 @@ from src.loaders.loader_json import JsonDataLoader
 
 from src.handlers.base import HandlerBase
 
-from src.handlers.decorators import (
-    update_menu_callback_user_input_data
-)
-
 from src.messages.menus.age import AgeMenuMessage
 from src.messages.menus.year import YearMenuMessage
 from src.messages.menus.period import PeriodMenuMessage
@@ -73,9 +69,12 @@ class SalaryHandler(HandlerBase):
 
     """
     def handle(self, bot, update, **session_data):
-        user_data = session_data["user_data"]
-        value = float(update.message.text)
-        user_data["input_data"]["salary"] = value
+        self.update_message_user_input_data(
+            data_key="salary",
+            update=update,
+            to_type=float,
+            **session_data
+        )
 
 
 class PeriodCallbackHandler(HandlerBase):
@@ -85,12 +84,13 @@ class PeriodCallbackHandler(HandlerBase):
     to user input data inside session.
 
     """
-    @update_menu_callback_user_input_data(
-        data_key="period",
-        menu=PeriodMenuMessage)
     def handle(self, bot, update, **session_data):
-        """Handled by decorator"""
-        pass
+        self.update_menu_callback_user_input_data(
+            data_key="period",
+            menu=PeriodMenuMessage,
+            update=update,
+            **session_data
+        )
 
 
 class YearCallbackHandler(HandlerBase):
@@ -100,12 +100,13 @@ class YearCallbackHandler(HandlerBase):
     to user input data inside session.
 
     """
-    @update_menu_callback_user_input_data(
-        data_key="year",
-        menu=YearMenuMessage)
     def handle(self, bot, update, **session_data):
-        """Handled by decorator"""
-        pass
+        self.update_menu_callback_user_input_data(
+            data_key="year",
+            menu=YearMenuMessage,
+            update=update,
+            **session_data
+        )
 
 
 class HolidayAllowanceCallbackHandler(HandlerBase):
@@ -115,12 +116,13 @@ class HolidayAllowanceCallbackHandler(HandlerBase):
     to user input data inside session.
 
     """
-    @update_menu_callback_user_input_data(
-        data_key="holiday_allowance",
-        menu=HolidayAllowanceMenuMessage)
     def handle(self, bot, update, **session_data):
-        """Handled by decorator"""
-        pass
+        self.update_menu_callback_user_input_data(
+            data_key="holiday_allowance",
+            menu=HolidayAllowanceMenuMessage,
+            update=update,
+            **session_data
+        )
 
 
 class SocialSecurityCallbackHandler(HandlerBase):
@@ -130,12 +132,13 @@ class SocialSecurityCallbackHandler(HandlerBase):
     to user input data inside session.
 
     """
-    @update_menu_callback_user_input_data(
-        data_key="social_security",
-        menu=SocialSecurityMenuMessage)
     def handle(self, bot, update, **session_data):
-        """Handled by decorator"""
-        pass
+        self.update_menu_callback_user_input_data(
+            data_key="social_security",
+            menu=SocialSecurityMenuMessage,
+            update=update,
+            **session_data
+        )
 
 
 class AgeCallbackHandler(HandlerBase):
@@ -145,12 +148,13 @@ class AgeCallbackHandler(HandlerBase):
     to user input data inside session.
 
     """
-    @update_menu_callback_user_input_data(
-        data_key="age",
-        menu=AgeMenuMessage)
     def handle(self, bot, update, **session_data):
-        """Handled by decorator"""
-        pass
+        self.update_menu_callback_user_input_data(
+            data_key="age",
+            menu=AgeMenuMessage,
+            update=update,
+            **session_data
+        )
 
 
 class RulingCallbackHandler(HandlerBase):
@@ -160,12 +164,13 @@ class RulingCallbackHandler(HandlerBase):
     to user input data inside session.
 
     """
-    @update_menu_callback_user_input_data(
-        data_key="ruling",
-        menu=RulingMenuMessage)
     def handle(self, bot, update, **session_data):
-        """Handled by decorator"""
-        pass
+        self.update_menu_callback_user_input_data(
+            data_key="ruling",
+            menu=RulingMenuMessage,
+            update=update,
+            **session_data
+        )
 
 
 class WorkingHoursCallbackHandler(HandlerBase):
@@ -175,12 +180,13 @@ class WorkingHoursCallbackHandler(HandlerBase):
     to user input data inside session.
 
     """
-    @update_menu_callback_user_input_data(
-        data_key="working_hours",
-        menu=WorkingHoursMenuMessage)
     def handle(self, bot, update, **session_data):
-        """Handled by decorator"""
-        pass
+        self.update_menu_callback_user_input_data(
+            data_key="working_hours",
+            menu=WorkingHoursMenuMessage,
+            update=update,
+            **session_data
+        )
 
 
 class ResultCallbackHandler(HandlerBase):

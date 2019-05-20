@@ -51,6 +51,48 @@ class HandlerBase(abc.ABC):
             action=telegram.ChatAction.TYPING
         )
 
+    @staticmethod
+    def update_message_user_input_data(data_key, update, to_type=None, **session_data):
+        """
+        Update session with user data taken from message.
+
+        Args:
+            data_key (str): Data key to save in session.
+            update (instance): Incoming update.
+            to_type (callable, None): Function to convert taken value to (float, int, lambda, etc).
+            session_data (dict): Session data.
+
+        Returns: None.
+
+        """
+        user_data = session_data["user_data"]
+        value = update.message.text
+
+        if to_type and callable(to_type):
+            value = to_type(value)
+
+        user_data["input_data"][data_key] = value
+
+    @staticmethod
+    def update_menu_callback_user_input_data(data_key, menu, update, **session_data):
+        """
+        Update session with user data taken from menu by command.
+
+        Args:
+            data_key (str): Data key to save in session.
+            menu (instance): Message Menu instance.
+            update (instance): Incoming update.
+            session_data (dict): Session data.
+
+        Returns: None.
+
+        """
+        command = update.callback_query.data
+        value = menu.get_value_from_command(command)
+
+        user_data = session_data["user_data"]
+        user_data["input_data"][data_key] = value
+
     def handle(self, bot, update, **session_data):
         """
         Base handling method.
