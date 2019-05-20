@@ -34,7 +34,7 @@ class HelpTextMessage(TextMessageBase):
             "/holiday \n\n"
             ":star: ORIGINALS \n\n"
             "Original web version of calculator see <a href=\"https://thetax.nl\">here</a>. \n"
-            "Original web version author: <b>stevermeister</b> \n\n"
+            "Original web version author: <b>Stepan Suvorov</b> \n\n"
             ":email: CONTACTS \n\n"
             "Email for support and feedback related to BOT: <b>rk.social.services@gmail.com</b>. \n\n"
             "License: MIT. \n\n",
