@@ -4,7 +4,7 @@ https://t.me/nl_taxes_bot
 
 Based on Web version:  
 https://thetax.nl  
-(**author**: Stepan Suvorov) 
+(**author**: Stepan Suvorov)  
 https://github.com/stevermeister/dutch-tax-income-calculator
 
 
