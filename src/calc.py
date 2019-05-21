@@ -1,5 +1,7 @@
 import math
+
 from collections import OrderedDict
+from types import MappingProxyType
 
 from .utils import bool2yesno
 
@@ -11,6 +13,18 @@ class TaxCalculator:
     and calculate results.
 
     """
+    __slots__ = (
+        "_tax_data",
+        "_age",
+        "_year",
+        "_period",
+        "_salary",
+        "_ruling",
+        "_working_hours",
+        "_social_security",
+        "_holiday_allowance",
+    )
+
     def __init__(
             self,
             loader,
@@ -309,4 +323,5 @@ class TaxCalculator:
         result["calculated_day_net_income"] = math.floor(net_year / self._tax_data["workingDays"])
         result["calculated_hour_net_income"] = math.floor(net_year / (self._tax_data["workingWeeks"] * self._working_hours))
 
-        return result
+        # Return immutable result dict
+        return MappingProxyType(result)
