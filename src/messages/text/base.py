@@ -1,7 +1,7 @@
 import abc
 
 
-class TextMessageBase:
+class TextMessageBase(abc.ABC):
 
     @abc.abstractmethod
     def get_text(self):

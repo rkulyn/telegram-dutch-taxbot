@@ -1,17 +1,11 @@
-import abc
 import telegram
 
 
-class HandlerBase(abc.ABC):
+class HandlerBase:
     """
     Telegram response handler base class.
 
     """
-    __slots__ = (
-        "_messages",
-        "_emulate_typing",
-    )
-
     def __init__(self, messages=None, emulate_typing=True):
         self._messages = messages or tuple()
         self._emulate_typing = emulate_typing
@@ -110,6 +104,7 @@ class HandlerBase(abc.ABC):
         Returns: None.
 
         """
+        # Do nothing
         pass
 
     def send_responses(self, bot, chat_id, custom_data=None, **session_data):

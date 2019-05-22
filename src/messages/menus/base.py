@@ -3,7 +3,7 @@ import telegram
 from operator import itemgetter
 
 
-class MenuMessageBase:
+class MenuMessageBase(abc.ABC):
     """
     Menu base class.
     Build inline keyboard menu to send to user.

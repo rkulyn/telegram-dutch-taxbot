@@ -5,7 +5,7 @@ from collections import OrderedDict
 from .constants import RESULT_KEY_MAP
 
 
-class ResultMessageBase:
+class ResultMessageBase(abc.ABC):
     """
     Result message base class.
 
