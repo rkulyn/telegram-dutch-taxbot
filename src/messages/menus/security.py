@@ -18,10 +18,7 @@ class SocialSecurityMenuMessage(MenuMessageBase):
     @staticmethod
     def button_factory(command, value):
         button = telegram.InlineKeyboardButton(
-            (
-                ":small_red_triangle: No",
-                ":small_red_triangle_down: Yes"
-            )[bool(value)],
+            ("No", "Yes")[bool(value)],
             callback_data=command
         )
         return button
