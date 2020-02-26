@@ -19,12 +19,10 @@ class HolidayAllowanceMenuMessage(MenuMessageBase):
     @staticmethod
     def button_factory(command, value):
         button = telegram.InlineKeyboardButton(
-            emojize(
-                ":smile: Yes"
-                if value
-                else ":disappointed: No",
-                use_aliases=True
-            ),
+            (
+                ":small_red_triangle: No",
+                ":small_red_triangle_down: Yes"
+            )[bool(value)],
             callback_data=command
         )
         return button
@@ -32,7 +30,8 @@ class HolidayAllowanceMenuMessage(MenuMessageBase):
     def get_text(self):
         return emojize(
             "Is holiday allowance included? \n"
-            "<i>(Gross salary provided includes 8% of holiday allowance).</i> \n\n"
+            "<i>(Gross salary provided includes 8% of holiday allowance).</i> \n"
+            "Less income if set to 'Yes'. \n\n"
             ":point_right: Type /help to get help. \n"
             ":point_right: Type /holiday to allowance details. \n\n",
             use_aliases=True

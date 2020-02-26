@@ -1,5 +1,4 @@
 import telegram
-from emoji import emojize
 
 from .base import MenuMessageBase
 
@@ -19,15 +18,16 @@ class SocialSecurityMenuMessage(MenuMessageBase):
     @staticmethod
     def button_factory(command, value):
         button = telegram.InlineKeyboardButton(
-            emojize(
-                ":smile: Yes"
-                if value
-                else ":disappointed: No",
-                use_aliases=True
-            ),
+            (
+                ":small_red_triangle: No",
+                ":small_red_triangle_down: Yes"
+            )[bool(value)],
             callback_data=command
         )
         return button
 
     def get_text(self):
-        return "Is social security included?"
+        return (
+            "Is social security included? \n"
+            "Less income if set to 'Yes'."
+        )
