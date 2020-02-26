@@ -258,10 +258,6 @@ class TaxCalculator:
                 tax_free_year = taxable_year * 0.3
                 taxable_year -= tax_free_year
 
-                if taxable_year < ruling_income:
-                    tax_free_year = gross_year - ruling_income
-                    taxable_year = ruling_income
-
         taxable_year = math.floor(taxable_year)
 
         # Add calculated data to result
